@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+body,
+#root {
+    width: 100vw;
+    height: 100vh;
+}
+:root {
+    /* --background1:rgb(8, 28, 21);
+  --background2:rgb(27, 67, 50);
+  --background3:rgb(45, 106, 79);
+  --background4:rgb(64, 145, 108);
+  --background5:rgb(82, 183, 136);
+  --background6:rgb(116, 198, 157);
+  --background7:rgb(149, 213, 178);
+  --background8:rgb(183, 228, 199);
+  --background9:rgb(216, 243, 220); */
+    --background1: white;
+    --background2: rgb(230, 230, 230);
+    --background3: rgb(64, 145, 108);
+    --background4: #cdd4d0;
+    --background5: rgb(82, 183, 136);
+    --background6: rgb(116, 198, 157);
+    --background7: rgb(149, 213, 178);
+    --background8: rgb(183, 228, 199);
+    --background9: rgb(216, 243, 220);
+    --background10: rgb(199 205 203);
+    --background11: rgb(87 167 130);
+}

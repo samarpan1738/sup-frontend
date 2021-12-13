@@ -19,25 +19,20 @@ const NoUserFound = styled.p`
     color: #5f6e67;
 `;
 function List() {
-    const { recentChats } = useSelector((store) => store.dashboard);
     const conversations = useSelector((store) => store.conversations);
     const { queryText, searchResults } = useSelector((state) => state.searchUsers);
     // * 1. Shows recent conversations
     // * 2. Shows search results
     return (
         <StyledList>
-            {queryText.length === 0 && (
-                <div>
-                    {/* {recentChats.map((conversation) => {
-                        return <RecentChatListItem key={conversation.id} conversation={conversation} />;
-                    })} */}
-                    {Object.keys(conversations).map((id) => {
-                        console.log(`Rendering conversations[${id}] : `,conversations[id])
-                        return <RecentChatListItem key={id} conversation={conversations[id]} />;
-                    })}
-                </div>
-            )}
-            {searchResults.length > 0 && (
+            <div>
+                {Object.keys(conversations).map((id) => {
+                    console.log(`Rendering conversations[${id}] : `, conversations[id]);
+                    return <RecentChatListItem key={id} conversation={conversations[id]} />;
+                })}
+            </div>
+
+            {/* {searchResults.length > 0 && (
                 <div>
                     <h5
                         style={{
@@ -55,8 +50,8 @@ function List() {
                         return <SearchResultItem key={user.id} user={user} />;
                     })}
                 </div>
-            )}
-            {queryText.length !== 0 && searchResults.length === 0 && <NoUserFound>No user found</NoUserFound>}
+            )} */}
+            {/* {queryText.length !== 0 && searchResults.length === 0 && <NoUserFound>No user found</NoUserFound>} */}
         </StyledList>
     );
 }

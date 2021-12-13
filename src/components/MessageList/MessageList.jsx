@@ -7,6 +7,7 @@ import {
     StyledDateLabel,
     StyledMessageGroup,
     NoMessagesLabel,
+    StyledGifBox
 } from "../CurrentChat/styledComponents";
 
 const getDate = (dateTimeStr) => {
@@ -34,9 +35,8 @@ function MessageList({ conversationId, userId }) {
     useEffect(() => {
         if (messageListRef.current !== null) messageListRef.current.scrollTo(0, messageListRef.current.scrollHeight);
     }, [messages, conversationId]);
-    if(Object.keys(messages).length === 0)
-    {
-        return <NoMessagesLabel>No messages yet</NoMessagesLabel>
+    if (Object.keys(messages).length === 0) {
+        return <NoMessagesLabel>No messages yet</NoMessagesLabel>;
     }
 
     return (
@@ -53,12 +53,33 @@ function MessageList({ conversationId, userId }) {
                             return (
                                 <>
                                     <StyledMessagesListItem type={messageType}>
-                                        <StyledMessageBox>
-                                            <div className="StyledMessageBox_content">{message.text}</div>
-                                            <div style={{ color: "#565353" }} className="StyledMessageBox_timestamp">
-                                                {getMessageTimestamp(message.createdAt)}
-                                            </div>
-                                        </StyledMessageBox>
+                                        {message.type === "TEXT" ? (
+                                            <StyledMessageBox>
+                                                <div className="text-message">
+                                                    <span className="StyledMessageBox_text">{message.text}</span>
+                                                    <span className="StyledMessageBox_spacer"></span>
+                                                </div>
+                                                <div
+                                                    style={{ color: "#565353" }}
+                                                    className="StyledMessageBox_timestamp"
+                                                >
+                                                    {getMessageTimestamp(message.createdAt)}
+                                                </div>
+                                            </StyledMessageBox>
+                                        ) : (
+                                            <StyledGifBox padding="">
+                                                <img
+                                                    className="StyledMessageBox_img"
+                                                    src={message.file_uri}
+                                                    alt="Gif"
+                                                    width="160px"
+                                                    height="140px"
+                                                />
+                                                <div style={{ color: "white" }} className="StyledMessageBox_timestamp">
+                                                    {getMessageTimestamp(message.createdAt)}
+                                                </div>
+                                            </StyledGifBox>
+                                        )}
                                     </StyledMessagesListItem>
                                 </>
                             );

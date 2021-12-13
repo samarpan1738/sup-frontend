@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { ReactComponent as SearchIcon } from "../././../../assets/images/search.svg";
-
+import Select from "react-select";
 export const StyledModalBox = styled.div`
     width: 100%;
     max-width: 500px;
@@ -84,4 +84,10 @@ export const ModalDropdownContainer = styled.div`
     display: flex;
     flex-direction: column;
     row-gap: 8px;
+`;
+
+export const StyledSelect = styled(Select)`
+    &:focus {
+        outline: none !important;
+    }
 `;

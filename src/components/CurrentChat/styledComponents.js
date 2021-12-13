@@ -19,8 +19,8 @@ export const StyledAttachmentIcon = styled(AttachmentIcon)`
 export const StyledEmojiIcon = styled(EmojiIcon)`
     fill: var(--background3);
     cursor: pointer;
-    width:30px;
-    height:30px;
+    width: 30px;
+    height: 30px;
 `;
 export const StyledClosePanelIcon = styled(ClosePanelIcon)`
     // fill: var(--background3);
@@ -30,13 +30,17 @@ export const StyledClosePanelIcon = styled(ClosePanelIcon)`
 export const StyledMessageBox = styled.div`
     background-color: var(--background4);
     width: max-content;
-    padding: 6px 16px;
-    max-width: 45%;
+    min-width:100px;
+    max-width: 47%;
+    // padding: 6px 16px;
+    padding: 6px 10px 10px;
     display: flex;
     font-size: 14px;
+    flex-direction: column;
     color: black;
-    & > span {
-    }
+    position:relative;
+    gap: 5px;
+   
     & > span + span {
         margin-left: 14px;
         font-size: 12px;
@@ -53,15 +57,45 @@ export const StyledMessageBox = styled.div`
         align-items: flex-end;
         justify-content: flex-end;
     }
-    & .StyledMessageBox_content {
+    & .StyledMessageBox_text {
+        padding:0 6px;
     }
     & .StyledMessageBox_timestamp {
+        // border-top: 1px solid rgb(177 174 174);
+        font-size: 11px;
+        text-align: right;
+        width: 100%;
+        position:absolute;
+        bottom:4px;
+        right:8px;
+    }
+
+    & .StyledMessageBox_spacer
+    {
+        width:60px;
+    }
+
+    & .text-message
+    {
+        display:flex;
     }
 `;
+
+
+export const StyledGifBox = styled(StyledMessageBox)`
+    padding: 6px 6px;
+    & .StyledMessageBox_timestamp {
+        bottom:12px;
+        right:14px;
+    }
+    border-radius:10px !important;
+    & .StyledMessageBox_img {
+        border-radius:10px;
+    }
+`
 export const StyledMessagesList = styled.ul`
     flex: 1;
     padding: 14px 0px;
-    // padding-top:0px;
     overflow: auto;
     color: black;
     scroll-behavior: smooth;
@@ -92,15 +126,13 @@ export const StyledTimeline = styled.div`
     border-radius: 10px;
     margin: 10px 0;
 `;
-export const BottomBar = styled(TopBar)`
-`;
-export const IconContainer=styled.div`
-    display:flex;
-    & > button + button
-    {
-        margin-left:16px;
+export const BottomBar = styled(TopBar)``;
+export const IconContainer = styled.div`
+    display: flex;
+    & > button + button {
+        margin-left: 16px;
     }
-`
+`;
 export const StyledInput = styled.input`
     background-color: var(--background2);
     width: 100%;

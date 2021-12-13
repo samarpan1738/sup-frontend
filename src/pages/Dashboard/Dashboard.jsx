@@ -9,6 +9,7 @@ import { sendViaSocket, socket } from "../../store/slices/socket/socketSlice";
 import FeatureList from "../../components/FeatureList/FeatureList";
 import { setUserDetails } from "../../store/slices/userDetails/userDetailsSlice";
 import SearchUsersModal from "../../components/SearchUsersModal/SearchUsersModal";
+import CreateGroupModal from "../../components/CreateGroupModal/CreateGroupModal";
 
 const StyledDashboard = styled.div`
     background-color: var(--background2);
@@ -23,7 +24,8 @@ function Dashboard() {
     const dispatch = useDispatch();
     const { isAuthenticated } = useSelector((state) => state.userDetails);
     const { user } = useSelector((state) => state.currentChat);
-    const {isModalOpen}=useSelector(state => state.searchUsers);
+    // const {isModalOpen}=useSelector(state => state.searchUsers);
+    const {search:isSearchModalOpen,createGroup:isGroupModalOpen}=useSelector(state => state.modal);
     useEffect(() => {
         if (isAuthenticated === undefined || isAuthenticated === null || isAuthenticated === false) {
             fetch("/api/user/", {
@@ -75,7 +77,8 @@ function Dashboard() {
     }, [isAuthenticated, history]);
     return (
         <StyledDashboard>
-            {isModalOpen && <SearchUsersModal/>}
+            {isSearchModalOpen && <SearchUsersModal/>}
+            {isGroupModalOpen && <CreateGroupModal/>}
             <Sidebar />
             {user ? <CurrentChat /> : <FeatureList />}
             <CurrentChatProfile />

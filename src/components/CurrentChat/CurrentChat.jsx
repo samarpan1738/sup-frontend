@@ -3,24 +3,14 @@ import TopBar, { iconMappings, StyledIconContainer, StyledMenu } from "../../glo
 import StyledSection from "../../globals/styledComponents/StyledSection";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    StyledSendIcon,
     StyledAttachmentIcon,
-    StyledMessageBox,
-    StyledMessagesList,
-    StyledMessagesListItem,
     BottomBar,
-    StyledInput,
-    StyledInputContainer,
-    DaySeperator,
-    Line,
     StyledEmojiIcon,
     IconContainer,
     StyledClosePanelIcon,
 } from "./styledComponents";
-import { addMessage, setCurrentChat, setIsProfileOpen } from "../../store/slices/currentChat/currentChatSlice";
-import { sendViaSocket, socket } from "../../store/slices/socket/socketSlice";
+import { setIsProfileOpen } from "../../store/slices/currentChat/currentChatSlice";
 import {
-    addMessageToConversation,
     markMessagesRead,
     setConversationMessages,
 } from "../../store/slices/conversations/conversationsSlice";
@@ -88,7 +78,7 @@ function CurrentChat() {
             .then((res) => res.json())
             .then((data) => {
                 if (data.success) {
-                    dispatch(setConversationMessages({ id: currentChat.conversationId, data: [] }));
+                    dispatch(setConversationMessages({ id: currentChat.conversationId, data: {} }));
                     toast({
                         title: data.message,
                         status: "success",
@@ -168,11 +158,15 @@ function CurrentChat() {
             </TopBar>
 
             <MessageList conversationId={currentChat.conversationId} userId={userId} />
-            {isGifPanelOpen && <GifPanel />}
+            {isGifPanelOpen && <GifPanel conversationId={currentChat.conversationId} userId={userId} />}
             <BottomBar hideAvatar={true} bgColor={"--background10"} bt="1px solid var(--background4)">
                 <IconContainer>
                     <button onClick={toggleGifPanel}>
-                        {isGifPanelOpen ? <StyledClosePanelIcon aria-label="Close gif panel"/> : <StyledEmojiIcon aria-label="Open gif panel" />}
+                        {isGifPanelOpen ? (
+                            <StyledClosePanelIcon aria-label="Close gif panel" />
+                        ) : (
+                            <StyledEmojiIcon aria-label="Open gif panel" />
+                        )}
                     </button>
                     <button>
                         <StyledAttachmentIcon />

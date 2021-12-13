@@ -6,10 +6,10 @@ function MessageBox({ conversationId, userId }) {
     const [msg, setMsg] = useState("");
     const dispatch = useDispatch();
     const handleEnterKey = (e) => {
-        if (e.code === "Enter") sendMessage();
+        if (e.code === "Enter") sendTextMessage();
     };
     // console.log("MessageBox re-render")
-    const sendMessage = () => {
+    const sendTextMessage = () => {
         if (msg.trim() !== "") {
             dispatch(
                 sendViaSocket({
@@ -18,6 +18,7 @@ function MessageBox({ conversationId, userId }) {
                         roomId: conversationId + "",
                         sender: userId + "",
                         content: msg.trim(),
+                        type:"TEXT"
                     },
                 })
             );
@@ -34,7 +35,7 @@ function MessageBox({ conversationId, userId }) {
                     onKeyUp={handleEnterKey}
                 />
             </StyledInputContainer>
-            <button onClick={sendMessage}>
+            <button onClick={sendTextMessage}>
                 <StyledSendIcon />
             </button>
         </>

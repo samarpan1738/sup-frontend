@@ -48,11 +48,11 @@ export const StyledMenu = styled.div`
     right: 0;
     z-index: 10;
     color: rgb(74, 74, 74);
-    padding: 8px 0px;
+    padding: 6px 0px;
     box-shadow: rgba(0, 0, 0, 0.26) 0px 2px 5px 0px, rgba(0, 0, 0, 0.16) 0px 2px 10px 0px;
     border-radius: 2px;
     & > div {
-        padding: 2px 24px;
+        padding: 8px 24px;
         cursor: pointer;
         &:hover {
             background-color: rgb(226 235 231);

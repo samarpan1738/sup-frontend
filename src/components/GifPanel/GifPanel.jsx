@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchTrendingGifs} from "../../store/slices/gifs/gifsSlice";
-import {GifContainer,GifSearchBar,GifPreview,GifSearchBarInput,StyledGifPanel} from "./styles";
+import { fetchTrendingGifs } from "../../store/slices/gifs/gifsSlice";
+import { sendViaSocket } from "../../store/slices/socket/socketSlice";
+import { GifContainer, GifSearchBar, GifPreview, GifSearchBarInput, StyledGifPanel } from "./styles";
 
 // TODO: Add pagination on scroll
 // TODO: Add loading animation
-function GifPanel() {
+function GifPanel({ conversationId, userId }) {
     const gifs = useSelector((state) => state.gifs);
     const dispatch = useDispatch();
     useEffect(async () => {
@@ -13,6 +14,19 @@ function GifPanel() {
             dispatch(fetchTrendingGifs());
         }
     }, []);
+    const sendImgMessage = (url) => {
+        dispatch(
+            sendViaSocket({
+                path: "sendToRoom",
+                data: {
+                    roomId: conversationId + "",
+                    sender: userId + "",
+                    content: url,
+                    type:"IMAGE"
+                },
+            })
+        );
+    };
     return (
         <StyledGifPanel>
             <GifSearchBar>
@@ -20,7 +34,12 @@ function GifPanel() {
             </GifSearchBar>
             <GifContainer>
                 {gifs.trending.map((gif) => (
-                    <GifPreview key={gif.id} src={gif.media[0].gif.url} alt={gif.content_description} />
+                    <GifPreview
+                        key={gif.id}
+                        src={gif.media[0].gif.url}
+                        alt={gif.content_description}
+                        onClick={()=>sendImgMessage(gif.media[0].gif.url)}
+                    />
                 ))}
             </GifContainer>
         </StyledGifPanel>

@@ -1,32 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
 import { Avatar, useToast } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentChat } from "../../store/slices/currentChat/currentChatSlice";
-import { StyledDetailsContainer, StyledListItem } from "./styles";
+import { StyledDetailsContainer } from "./styles";
 import styled from "styled-components";
 import { useHistory } from "react-router";
 const SRI_StyledDetailsContainer = styled(StyledDetailsContainer)`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: none;
 `;
 const AddButton = styled.button`
     --color: #377056;
     ${(props) => props.added && "background-color:var(--color);"}
+    ${(props) => props.added && props.isHovered && "background-color:red;"}
     color: ${(props) => (props.added ? "white" : "var(--color)")};
     padding: 0px 12px;
     font-size: 14px;
     border: 1px solid var(--color);
+    ${(props) => props.added && props.isHovered && "border:none;"}
+    
     transition: all 100ms ease-in;
     &:hover {
         ${(props) => !props.added && "box-shadow: -4px 4px var(--color);"}
     }
 `;
 
-function SearchResultItem({ user }) {
-    const history=useHistory();
+const StyledListItem = styled.div`
+    padding: 0px 16px;
+    padding-top: 12px;
+    padding-right: 8px;
+    display: flex;
+    cursor: pointer;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: rgb(212, 217, 225) 0px 1px 3px 0px;
+    &:hover {
+        background-color: var(--background4);
+    }
+`;
+
+function SearchResultItem({ user, added }) {
+    const history = useHistory();
     const userDetails = useSelector((state) => state.userDetails);
     const toast = useToast();
+    console.log(`userId : ${user.id} , added : ${added}`);
+    const [isHovered,setHovered]=useState(false);
+    const handleMouseOver=(e)=>{
+        console.log(`handleMouseOver called ${e.currentTarget}`)
+        setHovered(true);
+    }
+    const handleMouseOut=(e)=>{
+        console.log(`handleMouseOut called ${e.currentTarget}`)
+        setHovered(false);
+    }
     const addUser = () => {
         fetch("/api/conversations/", {
             method: "POST",
@@ -82,7 +110,11 @@ function SearchResultItem({ user }) {
                     </i>
                 </div>
                 <div>
-                    <AddButton onClick={addUser}>add</AddButton>
+                    <AddButton onClick={addUser} isHovered={isHovered} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} added={added}>{added ? (isHovered ? "remove" : "added") : "add"}</AddButton>
+                    {/* {added === -1 ? (
+                    ) : (
+                        <AddedButton onClick={addUser}>{added === -1 ? "added" : "add"}</AddedButton>
+                    )} */}
                 </div>
             </SRI_StyledDetailsContainer>
         </StyledListItem>

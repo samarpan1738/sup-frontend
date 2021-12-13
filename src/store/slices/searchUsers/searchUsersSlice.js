@@ -17,7 +17,6 @@ const searchUsersSlice = createSlice({
         loading: false,
         searchResults: [],
         queryText: "",
-        isModalOpen: false,
     },
     reducers: {
         setQueryText: (state, action) => {
@@ -26,9 +25,6 @@ const searchUsersSlice = createSlice({
             if (action.payload.length === 0) {
                 state.searchResults = [];
             }
-        },
-        setModalOpen: (state, action) => {
-            state.isModalOpen = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -55,6 +51,6 @@ const searchUsersSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setQueryText ,setModalOpen} = searchUsersSlice.actions;
+export const { setQueryText } = searchUsersSlice.actions;
 
 export default searchUsersSlice.reducer;

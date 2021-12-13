@@ -8,6 +8,7 @@ import asyncThunkReducer from "./middlewares/index";
 import searchUsersReducer from "./slices/searchUsers/searchUsersSlice";
 import conversationsReducer from "./slices/conversations/conversationsSlice";
 import gifsReducer from "./slices/gifs/gifsSlice";
+import modalReducer from "./slices/modal/modalSlice";
 // import logger from 'redux-logger'
 
 export default configureStore(
@@ -21,7 +22,8 @@ export default configureStore(
             users: asyncThunkReducer,
             searchUsers: searchUsersReducer,
             conversations: conversationsReducer,
-            gifs:gifsReducer
+            gifs:gifsReducer,
+            modal:modalReducer
         },
         middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
     },

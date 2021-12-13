@@ -23,14 +23,14 @@ const getTimestamp = (createdAt) => {
 function RecentChatListItem({ conversation }) {
     const dispatch = useDispatch();
     const { userId } = useSelector((state) => state.userDetails);
-    const { title, last_message, type, users, id } = conversation;
+    const { title, type, users, id } = conversation;
     let lastMsg = null;
     const msgDateGroups = Object.keys(conversation.messages);
     console.log("msgDateGroupsCnt : ", msgDateGroups.length);
     if (msgDateGroups.length > 0) {
         const lastMsgGroup = conversation.messages[msgDateGroups[msgDateGroups.length - 1]];
-        const msgIds=Object.keys(lastMsgGroup)
-        lastMsg = lastMsgGroup[msgIds[msgIds.length-1]];
+        const msgIds = Object.keys(lastMsgGroup);
+        lastMsg = lastMsgGroup[msgIds[msgIds.length - 1]];
         console.log("lastMsg : ", lastMsg);
     }
     let timestamp = "";
@@ -41,7 +41,7 @@ function RecentChatListItem({ conversation }) {
     let conversationTitle = title,
         conversationAvatarUri = "https://avatars.dicebear.com/api/human/john.svg";
     let contact = null;
-    if (type === "Contact") {
+    if (type === "CONTACT") {
         // Only 2 users
         contact = users[0].user;
         if (contact.id === userId) contact = users[1].user;
@@ -84,7 +84,11 @@ function RecentChatListItem({ conversation }) {
                 </p>
 
                 <p className="conversation_last_message">
-                    {lastMsg !== null ? lastMsg.text : "This is the start of this conversation"}
+                    {lastMsg !== null
+                        ? lastMsg.type === "IMAGE"
+                            ? "GIF"
+                            : lastMsg.text
+                        : "This is the start of this conversation"}
                 </p>
             </StyledDetailsContainer>
         </StyledListItem>

@@ -32,14 +32,16 @@ export const conversationsSlice = createSlice({
             state[action.payload.id] = action.payload;
         },
         addMessageToConversation: (state, action) => {
-            const messages = state[action.payload.data.conversation_id.toString()].messages;
+            const conversationId=action.payload.data.conversation_id.toString();
+            const messageId=action.payload.data.id.toString();
+            console.log("state[conversationId] : ",state[conversationId])
+            const messages = state[conversationId].messages;
             const groupKey = action.payload.data.createdAt.substring(0, 10);
-            if (messages[groupKey] === undefined) messages[groupKey] = {};
-            messages[groupKey][action.payload.data.id.toString()] = { ...action.payload.data, read: false };
-            console.log("action.payload.data.currentConversationId : ", action.payload.currentConversationId);
-            console.log("action.payload.data.conversation_id : ", action.payload.data.conversation_id);
-            if (action.payload.currentConversationId != action.payload.data.conversation_id)
-                state[action.payload.data.conversation_id.toString()].unreadCounter++;
+            if (!messages[groupKey]) messages[groupKey] = {};
+            const isMsgRead = action.payload.myId === action.payload.data.sender_id;
+            messages[groupKey][messageId] = { ...action.payload.data, read: isMsgRead};
+            if (action.payload.currentConversationId !== action.payload.data.conversation_id && !isMsgRead)
+                state[conversationId].unreadCounter++;
             return state;
         },
         setConversationMessages: (state, action) => {
@@ -52,10 +54,12 @@ export const conversationsSlice = createSlice({
         markMessagesRead: (state, action) => {
             console.log(action.payload);
             const { conversationId, unreadMsgIds } = action.payload;
-            const convMsgs = state[conversationId].messages;
-            unreadMsgIds.forEach(({ id, createdAt }) => {
-                convMsgs[createdAt.substring(0, 10)][id].read = true;
-            });
+            if (state[conversationId]) {
+                const convMsgs = state[conversationId].messages;
+                unreadMsgIds.forEach(({ id, createdAt }) => {
+                    convMsgs[createdAt.substring(0, 10)][id].read = true;
+                });
+            }
             // state[action.payload.toString()].unreadCounter = 0;
         },
     },

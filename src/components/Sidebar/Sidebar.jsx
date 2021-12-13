@@ -9,7 +9,7 @@ import { socket } from "../../store/slices/socket/socketSlice";
 import { addMessageToConversation, setConversations } from "../../store/slices/conversations/conversationsSlice";
 import styled from "styled-components";
 import { setUserDetails } from "../../store/slices/userDetails/userDetailsSlice";
-import { setModalOpen } from "../../store/slices/searchUsers/searchUsersSlice";
+import { setModalOpen } from "../../store/slices/modal/modalSlice";
 import { useHistory } from "react-router";
 const styles = {
     "--flex-grow": "1.1",
@@ -17,7 +17,7 @@ const styles = {
     "--border-right": "0.8px solid var(--background4)",
 };
 const DropdownMenuItem = styled.div`
-    height: 35px;
+    // height: 40px;
     display: flex;
     align-items: center;
     &:not(:last-child) {
@@ -26,7 +26,7 @@ const DropdownMenuItem = styled.div`
 `;
 
 function Sidebar() {
-    const { isAuthenticated, accessToken } = useSelector((state) => state.userDetails);
+    const { isAuthenticated, accessToken,userId } = useSelector((state) => state.userDetails);
     const history=useHistory();
     const dispatch = useDispatch()
     const currentChat = useSelector((state) => state.currentChat);
@@ -37,8 +37,8 @@ function Sidebar() {
     const toggleMenuState = () => {
         setMenu((prevState) => !prevState);
     };
-    const openSearchModal=()=>{
-        dispatch(setModalOpen(true));
+    const openModal=(target)=>{
+        dispatch(setModalOpen({target,value:true}));
     }
     useEffect(() => {
         if (isAuthenticated === true) {
@@ -100,19 +100,20 @@ function Sidebar() {
                 console.log(err);
             });
     };
+
     useEffect(() => {
-        console.log("Setting message event listener");
+        // console.log("Setting message event listener");
         socket.removeAllListeners("message");
         socket.on("message", (data) => {
-            console.log("socket message : ", data, " , currentChat.conversationId : ", currentChat.conversationId);
+            // console.log("socket message : ", data, " , currentChat.conversationId : ", currentChat.conversationId);
             // data.currentConversationId=currentChat.conversationId;
             // data = { ...data, currentConversationId: currentChat.conversationId };
-            dispatch(addMessageToConversation({ data, currentConversationId: currentChat.conversationId }));
+            dispatch(addMessageToConversation({ data, currentConversationId: currentChat.conversationId,myId:userId }));
         });
-        console.log("message event listeners : ", socket.listeners("message"));
+        // console.log("message event listeners : ", socket.listeners("message"));
     }, [currentChat.conversationId]);
     useEffect(() => {
-        console.log("conversations.length : ", Object.keys(conversations).length);
+        // console.log("conversations.length : ", Object.keys(conversations).length);
         // console.log("conversations : ",conversations)
         if (Object.keys(conversations).length > 0)
             socket.emit(
@@ -124,18 +125,17 @@ function Sidebar() {
         <StyledSection style={styles}>
             <TopBar>
                 <StyledIconContainer>
-                    <button onClick={openSearchModal}>{iconMappings["search"]}</button>
+                    <button onClick={()=>openModal("search")}>{iconMappings["search"]}</button>
                     <button>{iconMappings["chat"]}</button>
                     <button onClick={toggleMenuState}>{iconMappings["menu"]}</button>
                     {menu === true && (
-                        <StyledMenu ref={menuRef}>
-                            <DropdownMenuItem>Clear chat</DropdownMenuItem>
+                        <StyledMenu ref={menuRef} onClick={toggleMenuState}>
+                            <DropdownMenuItem onClick={()=>openModal("createGroup")}>Create Group</DropdownMenuItem>
                             <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
                         </StyledMenu>
                     )}
                 </StyledIconContainer>
             </TopBar>
-            {/* <SearchUsers /> */}
             <List />
         </StyledSection>
     );

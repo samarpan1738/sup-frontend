@@ -1,4 +1,5 @@
 import React from "react";
+import { flushSync } from "react-dom";
 import { Avatar } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import { setCurrentChat } from "../../store/slices/currentChat/currentChatSlice";
@@ -20,9 +21,11 @@ const getTimestamp = (createdAt) => {
             dateStyle: "short",
         });
 };
-function RecentChatListItem({ conversation }) {
+const RecentChatListItem = React.memo(({ conversation }) => {
+    console.log(`Rendering conversations list item ${conversation.id}`);
     const dispatch = useDispatch();
     const { userId } = useSelector((state) => state.userDetails);
+    const currentChat = useSelector((state) => state.currentChat);
     const { title, type, users, id } = conversation;
     let lastMsg = null;
     const msgDateGroups = Object.keys(conversation.messages);
@@ -39,41 +42,40 @@ function RecentChatListItem({ conversation }) {
     }
 
     let conversationTitle = title,
-        conversationAvatarUri = "https://avatars.dicebear.com/api/human/john.svg";
+        conversationAvatarUri = conversation.conversationIconUrl;
     let contact = null;
     if (type === "CONTACT") {
         // Only 2 users
-        contact = users[0].user;
-        if (contact.id === userId) contact = users[1].user;
+        contact = users[Object.keys(users)[0]];
+        console.log(`${typeof Object.keys(users)[0]} == ${typeof userId}`)
+        if (Object.keys(users)[0] == userId) contact = users[Object.keys(users)[1]];
+        console.log("contact : ",contact);
         conversationTitle = contact.name;
         conversationAvatarUri = contact.profile_pic_uri;
     }
 
-    const fetchUserDetails = () => {
+    const setCurrentConversation = () => {
         // Fetch user details from API
-        dispatch(
-            setCurrentChat({
-                isProfileOpen: false,
-                conversationId: id,
-                user: {
-                    name: conversationTitle,
-                    username: contact != null ? contact.username : null,
-                    lastSeen: contact != null ? contact.last_active : "yestersay",
-                    profilePicUrl: conversationAvatarUri,
-                    status: "Hey there! I'm using sup",
-                    blocked: true,
-                },
-            })
-        );
-        // setTimeout(()=>{
+        console.log("currentChat before flushsync: ", currentChat);
+        // if (currentChat.conversationId !== id) {
+        flushSync(() => {
+            dispatch(
+                setCurrentChat({
+                    isProfileOpen: false,
+                    conversationId: id,
+                    user: contact,
+                })
+            );
+        });
+        console.log("currentChat after flushsync: ", currentChat);
         dispatch(resetUnreadCounter(id));
-        // },3000);
+        // }
     };
     /**
      font-weight : ${props=>props.unread?"700":"normal"};
      */
     return (
-        <StyledListItem onClick={fetchUserDetails}>
+        <StyledListItem onClick={setCurrentConversation}>
             <Avatar src={conversationAvatarUri} width="38px" height="38px" />
             <StyledDetailsContainer>
                 <p>
@@ -93,6 +95,6 @@ function RecentChatListItem({ conversation }) {
             </StyledDetailsContainer>
         </StyledListItem>
     );
-}
+});
 
 export default RecentChatListItem;

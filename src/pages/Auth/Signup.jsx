@@ -31,6 +31,7 @@ function Signup() {
                 password: fd.get("password"),
                 name: fd.get("name"),
                 email: fd.get("email"),
+                profile_pic_uri:`https://avatars.dicebear.com/api/pixel-art/${fd.get("username")}.svg`
             }),
         })
             .then((res) => res.json())

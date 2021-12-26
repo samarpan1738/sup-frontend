@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setDashboard } from "../../store/slices/dashboard/dashboardSlice";
 import SearchUsers from "../SearchUsers/SearchUsers";
 import { socket } from "../../store/slices/socket/socketSlice";
-import { addMessageToConversation, setConversations } from "../../store/slices/conversations/conversationsSlice";
+import { addMessageToConversation, fetchConversations } from "../../store/slices/conversations/conversationsSlice";
 import styled from "styled-components";
 import { setUserDetails } from "../../store/slices/userDetails/userDetailsSlice";
 import { setModalOpen } from "../../store/slices/modal/modalSlice";
@@ -26,57 +26,23 @@ const DropdownMenuItem = styled.div`
 `;
 
 function Sidebar() {
-    const { isAuthenticated, accessToken,userId } = useSelector((state) => state.userDetails);
-    const history=useHistory();
-    const dispatch = useDispatch()
+    const { isAuthenticated, accessToken, userId, profile_pic_uri } = useSelector((state) => state.userDetails);
+    const history = useHistory();
+    const dispatch = useDispatch();
     const currentChat = useSelector((state) => state.currentChat);
-    const { recentChats } = useSelector((state) => state.dashboard);
     const conversations = useSelector((state) => state.conversations);
     const menuRef = useRef(null);
     const [menu, setMenu] = useState(false);
     const toggleMenuState = () => {
         setMenu((prevState) => !prevState);
     };
-    const openModal=(target)=>{
-        dispatch(setModalOpen({target,value:true}));
-    }
+    const openModal = (target) => {
+        dispatch(setModalOpen({ target, value: true }));
+    };
     useEffect(() => {
         if (isAuthenticated === true) {
-            fetch("/api/conversations", {
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            })
-                .then((res) => {
-                    if (res.status === 401 || res.status === 403) {
-                        return history.push("/login");
-                    }
-                    return res.json();
-                })
-                .then((data) => {
-                    console.log(data);
-                    // alert(data.message);
-                    if (data.success == true) {
-                        dispatch(
-                            setDashboard({
-                                recentChats: data.data,
-                            })
-                        );
-                        const conversationSliceInp = {};
-                        data.data.forEach((conv) => {
-                            console.log("conv :", conv);
-                            // conv.unreadCounter=0;
-                            conv = { ...conv, unreadCounter: 0 };
-                            conversationSliceInp[conv.id.toString()] = conv;
-                        });
-                        console.log("conversationSliceInp : ", conversationSliceInp);
-                        dispatch(setConversations(conversationSliceInp));
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+            dispatch(fetchConversations({history}));
+
         }
     }, [isAuthenticated, accessToken]);
     const logout = function () {
@@ -108,7 +74,9 @@ function Sidebar() {
             // console.log("socket message : ", data, " , currentChat.conversationId : ", currentChat.conversationId);
             // data.currentConversationId=currentChat.conversationId;
             // data = { ...data, currentConversationId: currentChat.conversationId };
-            dispatch(addMessageToConversation({ data, currentConversationId: currentChat.conversationId,myId:userId }));
+            dispatch(
+                addMessageToConversation({ data, currentConversationId: currentChat.conversationId, myId: userId })
+            );
         });
         // console.log("message event listeners : ", socket.listeners("message"));
     }, [currentChat.conversationId]);
@@ -123,14 +91,14 @@ function Sidebar() {
     }, [Object.keys(conversations).length]);
     return (
         <StyledSection style={styles}>
-            <TopBar>
+            <TopBar avatarUri={profile_pic_uri}>
                 <StyledIconContainer>
-                    <button onClick={()=>openModal("search")}>{iconMappings["search"]}</button>
+                    <button onClick={() => openModal("search")}>{iconMappings["search"]}</button>
                     <button>{iconMappings["chat"]}</button>
                     <button onClick={toggleMenuState}>{iconMappings["menu"]}</button>
                     {menu === true && (
                         <StyledMenu ref={menuRef} onClick={toggleMenuState}>
-                            <DropdownMenuItem onClick={()=>openModal("createGroup")}>Create Group</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => openModal("createGroup")}>Create Group</DropdownMenuItem>
                             <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
                         </StyledMenu>
                     )}

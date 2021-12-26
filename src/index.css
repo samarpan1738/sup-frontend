@@ -24,7 +24,8 @@ body,
   --background8:rgb(183, 228, 199);
   --background9:rgb(216, 243, 220); */
     --background1: white;
-    --background2: rgb(230, 230, 230);
+    /* --background2: rgb(230, 230, 230); */
+    --background2: #efefef;
     --background3: rgb(64, 145, 108);
     --background4: #cdd4d0;
     --background5: rgb(82, 183, 136);
@@ -32,6 +33,8 @@ body,
     --background7: rgb(149, 213, 178);
     --background8: rgb(183, 228, 199);
     --background9: rgb(216, 243, 220);
-    --background10: rgb(199 205 203);
+    /* Changing this because of contrast issues */
+    /* --background10: rgb(199 205 203); */
+    --background10: rgb(221 221 221);
     --background11: rgb(87 167 130);
 }

@@ -177,18 +177,6 @@ export const StyledProfileSection = styled.div`
     padding: 16px 24px;
     font-size: 16px;
     color: #313a37;
-    // & > header {
-    //     color: #41916c;
-    //     margin-bottom: 20px;
-    //     font-size: 14px;
-    // }
-    & > .current_chat_status {
-        border-bottom: 1px solid #b3c3bb;
-        padding-bottom: 8px;
-        margin-bottom: 8px;
-    }
-    & > .current_chat_username {
-    }
 `;
 export const StyledProfileHeader = styled(StyledProfileSection)`
     align-items: center;
@@ -215,25 +203,26 @@ export const StyledReportIcon = styled(ReportIcon)`
     font-size: 18px;
 `;
 export const StyledProfileActionContainer = styled.div`
-    margin-top: 20px;
+    // margin-top: 20px;
+    padding: 16px 24px;
 `;
 export const StyledProfileAction = styled.div`
     cursor: pointer;
     color: rgb(239, 105, 122);
     display: flex;
-    background-color: rgb(220, 220, 220);
-    padding: 10px 20px;
+    // background-color: rgb(220, 220, 220);
+    // padding: 10px 20px;
     border-radius: 10px;
     align-items: center;
-    margin: 0 10px;
-    margin-bottom: 16px;
+    // margin: 0 10px;
+    // margin-bottom: 16px;
     & > p {
         font-weight: 600;
     }
-    &:hover {
-        background-color: rgb(210, 210, 210);
-        box-shadow: 0px 0px 2px rgb(200, 200, 200);
-    }
+    // &:hover {
+    //     background-color: rgb(210, 210, 210);
+    //     box-shadow: 0px 0px 2px rgb(200, 200, 200);
+    // }
 `;
 export const DaySeperator = styled.div`
     display: flex;

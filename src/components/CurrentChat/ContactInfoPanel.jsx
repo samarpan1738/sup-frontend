@@ -15,7 +15,7 @@ import {
     StyledProfileActionContainer,
 } from "./styledComponents";
 import { getTimeStamp } from "./CurrentChat";
-function CurrentChatProfile() {
+function ContactInfoPanel() {
     const dispatch = useDispatch();
     const currentChat = useSelector((store) => store.currentChat);
     const closeProfile = () => {
@@ -31,7 +31,7 @@ function CurrentChatProfile() {
                         "--border-left": "0.8px solid var(--background4)",
                     }}
                 >
-                    <TopBar hideAvatar>
+                    <TopBar hideAvatar={true} avatarUri={currentChat.user.profile_pic_uri} name={currentChat.user.name}>
                         <div
                             style={{
                                 width: "100%",
@@ -51,36 +51,29 @@ function CurrentChatProfile() {
                     <StyledProfile>
                         <StyledProfileHeader>
                             <Avatar
-                                name="Dan Abrahmov"
-                                src={currentChat.user.profilePicUrl}
+                                src={currentChat.user.profile_pic_uri}
                                 width="180px"
                                 height="180px"
                                 borderWidth="2px"
                                 borderColor="rgb(45, 106, 79)"
                                 marginBottom="20px"
                             />
-                            <div style={{ width: "100%" }}>
-                                <p
-                                    style={{
-                                        fontSize: "20px",
-                                        marginBottom: "6px",
-                                    }}
-                                >
-                                    {currentChat.user.name}
-                                </p>
-                                <p
-                                    style={{
-                                        color: "grey",
-                                        fontSize: "14px",
-                                        letterSpacing: "0.5px",
-                                    }}
-                                >
-                                    last seen {getTimeStamp(currentChat.user.lastSeen)}
+                            <div className="w-full">
+                                <p className="text-2xl mb-1">{currentChat.user.name}</p>
+                                <p className="text-sm text-gray-500">
+                                    last seen {getTimeStamp(currentChat.user.last_active)}
                                 </p>
                             </div>
                         </StyledProfileHeader>
                         <StyledProfileSection>
-                            <header>About and username</header>
+                            <header
+                                style={{
+                                    color: "#41916c",
+                                }}
+                                className="mb-2 text-sm"
+                            >
+                                About and username
+                            </header>
                             <p className="current_chat_status">{currentChat.user.status}</p>
                             <p className="current_chat_username">{currentChat.user.username}</p>
                         </StyledProfileSection>
@@ -108,4 +101,4 @@ function CurrentChatProfile() {
     );
 }
 
-export default CurrentChatProfile;
+export default ContactInfoPanel;

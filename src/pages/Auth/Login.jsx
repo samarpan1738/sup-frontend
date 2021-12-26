@@ -47,10 +47,11 @@ function Login() {
                     dispatch(
                         setUserDetails({
                             isAuthenticated: true,
-                            accessToken: data.data.token,
                             name: data.data.name,
                             email: data.data.email,
                             userId: data.data.userId,
+                            profile_pic_uri: data.data.profile_pic_uri,
+                            status: data.data.status,
                         })
                     );
                 } else {
@@ -75,32 +76,36 @@ function Login() {
         }
     }, [isAuthenticated]);
     useEffect(() => {
-        fetch("/api/user/", {
-            method: "GET",
-        })
-            .then((res) => {
-                if (res.status === 401 || res.status === 403) {
-                    return;
-                }
-                return res.json();
+        console.log("isAuthenticated", isAuthenticated);
+        if (isAuthenticated === false) {
+            fetch("/api/user/", {
+                method: "GET",
             })
-            .then((data) => {
-                console.log(data);
-                if (data !== null && data.success === true) {
-                    dispatch(
-                        setUserDetails({
-                            isAuthenticated: true,
-                            accessToken: data.data.token,
-                            name: data.data.name,
-                            email: data.data.email,
-                            userId: data.data.id,
-                        })
-                    );
-                } 
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+                .then((res) => {
+                    if (res.status === 401 || res.status === 403) {
+                        return;
+                    }
+                    return res.json();
+                })
+                .then((data) => {
+                    console.log(data);
+                    if (data !== null && data.success === true) {
+                        dispatch(
+                            setUserDetails({
+                                isAuthenticated: true,
+                                name: data.data.name,
+                                email: data.data.email,
+                                userId: data.data.id,
+                                profile_pic_uri: data.data.profile_pic_uri,
+                                status: data.data.status,
+                            })
+                        );
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
     }, []);
     return (
         <StyledAuthPage>

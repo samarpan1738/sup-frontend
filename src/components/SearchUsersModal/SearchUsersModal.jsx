@@ -13,13 +13,24 @@ import {
     ModalDropdown,
     ModalDropdownContainer,
 } from "./styles";
-// TODO: Watch the tutorial for building a modal
+
 function SearchUsersModal() {
     const dispatch = useDispatch();
     const { queryText, searchResults } = useSelector((state) => state.searchUsers);
     const conversations = useSelector((state) => state.conversations);
     const conversationIds=Object.keys(conversations)
-   
+    const { userId } = useSelector((state) => state.userDetails);
+
+    const contacts = Object.keys(conversations).filter((key) => conversations[key].type === "CONTACT");
+    const contactUserIds = contacts.map((contactId) => {
+        // console.log(conversations[contactId].users);
+        const userObj =
+            conversations[contactId].users[0].user.id !== userId
+                ? conversations[contactId].users[0].user
+                : conversations[contactId].users[1].user;
+        return userObj.id;
+    });
+
     const handleQueryChange = (e) => {
         console.log(e.currentTarget.value);
         dispatch(setQueryText(e.currentTarget.value.trim()));
@@ -51,7 +62,7 @@ function SearchUsersModal() {
                     ) : searchResults.length > 0 ? (
                         <ModalDropdownContainer>
                             {searchResults.map((user) => {
-                                return <SearchResultItem key={user.id} user={user} added={conversationIds.indexOf(user.id.toString()) !== -1} />;
+                                return <SearchResultItem key={user.id} user={user} added={contactUserIds.indexOf(user.id)!== -1} />;
                             })}
                         </ModalDropdownContainer>
                     ) : (

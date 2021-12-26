@@ -10,10 +10,7 @@ import {
     StyledClosePanelIcon,
 } from "./styledComponents";
 import { setIsProfileOpen } from "../../store/slices/currentChat/currentChatSlice";
-import {
-    markMessagesRead,
-    setConversationMessages,
-} from "../../store/slices/conversations/conversationsSlice";
+import { deleteConversationMessages, markMessagesRead, setConversationMessages } from "../../store/slices/conversations/conversationsSlice";
 import { useToast } from "@chakra-ui/react";
 import MessageBox from "../MessageBox/MessageBox";
 import MessageList from "../MessageList/MessageList";
@@ -50,7 +47,8 @@ export const getTimeStamp = (lastActive) => {
         );
 };
 
-function CurrentChat() {
+const CurrentChat = React.memo(({ conversation }) => {
+    console.log("Rendering current chat");
     const menuRef = useRef(null);
     const [menu, setMenu] = useState(false);
     const [isGifPanelOpen, setGifPanelState] = useState(false);
@@ -64,43 +62,15 @@ function CurrentChat() {
     const toast = useToast();
     const dispatch = useDispatch();
     const currentChat = useSelector((store) => store.currentChat);
-    const conversations = useSelector((store) => store.conversations);
-    const { accessToken, isAuthenticated, userId } = useSelector((store) => store.userDetails);
+    const { accessToken, userId } = useSelector((store) => store.userDetails);
 
     const clearChat = () => {
         toggleMenuState();
-        fetch(`/api/conversations/${currentChat.conversationId}/messages`, {
-            method: "delete",
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.success) {
-                    dispatch(setConversationMessages({ id: currentChat.conversationId, data: {} }));
-                    toast({
-                        title: data.message,
-                        status: "success",
-                        duration: 5000,
-                        isClosable: true,
-                    });
-                } else {
-                    toast({
-                        title: "Unable to clear chat",
-                        status: "error",
-                        duration: 5000,
-                        isClosable: true,
-                    });
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        dispatch(deleteConversationMessages({conversationId:conversation.id,}));
     };
     useEffect(() => {
         // Api call to mark all unread messages as read
-        const messageGroups = conversations[currentChat.conversationId].messages;
+        const messageGroups = conversation.messages;
         const unreadMsgIds = [];
         Object.keys(messageGroups).forEach((key) => {
             Object.keys(messageGroups[key]).forEach((msgId) => {
@@ -110,7 +80,7 @@ function CurrentChat() {
             });
         });
         if (unreadMsgIds.length > 0) {
-            fetch(`/api/conversations/${currentChat.conversationId}/messages/markRead`, {
+            fetch(`/api/conversations/${conversation.id}/messages/markRead`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
@@ -125,11 +95,11 @@ function CurrentChat() {
                 });
             dispatch(markMessagesRead({ conversationId: currentChat.conversationId.toString(), unreadMsgIds }));
         }
-    }, [currentChat.conversationId, conversations[currentChat.conversationId].messages]);
+    }, [currentChat.conversationId, conversation.messages]);
     // console.log("Current chat re-render")
     return (
         <StyledSection style={styles}>
-            <TopBar avatarUri={currentChat.user.profilePicUrl}>
+            <TopBar avatarUri={currentChat.user.profile_pic_uri} name={currentChat.user.name}>
                 <div
                     style={{
                         width: "100%",
@@ -143,7 +113,7 @@ function CurrentChat() {
                 >
                     <p>{currentChat.user.name}</p>
                     <p style={{ fontWeight: "400", fontSize: "12px" }}>
-                        last seen {getTimeStamp(currentChat.user.lastSeen)}
+                        last seen {getTimeStamp(currentChat.user.last_active)}
                     </p>
                 </div>
                 <StyledIconContainer>
@@ -159,7 +129,7 @@ function CurrentChat() {
 
             <MessageList conversationId={currentChat.conversationId} userId={userId} />
             {isGifPanelOpen && <GifPanel conversationId={currentChat.conversationId} userId={userId} />}
-            <BottomBar hideAvatar={true} bgColor={"--background10"} bt="1px solid var(--background4)">
+            <BottomBar hideAvatar={true} bgColor={"--background10"}>
                 <IconContainer>
                     <button onClick={toggleGifPanel}>
                         {isGifPanelOpen ? (
@@ -176,6 +146,6 @@ function CurrentChat() {
             </BottomBar>
         </StyledSection>
     );
-}
+});
 
 export default CurrentChat;

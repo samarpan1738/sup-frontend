@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import CurrentChat from "../../components/CurrentChat/CurrentChat";
-import CurrentChatProfile from "../../components/CurrentChat/CurrentChatProfile";
+import ContactInfoPanel from "../../components/CurrentChat/ContactInfoPanel";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { sendViaSocket, socket } from "../../store/slices/socket/socketSlice";
@@ -10,6 +10,8 @@ import FeatureList from "../../components/FeatureList/FeatureList";
 import { setUserDetails } from "../../store/slices/userDetails/userDetailsSlice";
 import SearchUsersModal from "../../components/SearchUsersModal/SearchUsersModal";
 import CreateGroupModal from "../../components/CreateGroupModal/CreateGroupModal";
+import CurrentGroup from "../../components/CurrentGroup/CurrentGroup";
+import GroupInfoPanel from "../../components/CurrentGroup/GroupInfoPanel";
 
 const StyledDashboard = styled.div`
     background-color: var(--background2);
@@ -23,9 +25,10 @@ function Dashboard() {
     const history = useHistory();
     const dispatch = useDispatch();
     const { isAuthenticated } = useSelector((state) => state.userDetails);
-    const { user } = useSelector((state) => state.currentChat);
+    const { user, conversationId } = useSelector((state) => state.currentChat);
+    const conversations = useSelector((state) => state.conversations);
     // const {isModalOpen}=useSelector(state => state.searchUsers);
-    const {search:isSearchModalOpen,createGroup:isGroupModalOpen}=useSelector(state => state.modal);
+    const { search: isSearchModalOpen, createGroup: isGroupModalOpen } = useSelector((state) => state.modal);
     useEffect(() => {
         if (isAuthenticated === undefined || isAuthenticated === null || isAuthenticated === false) {
             fetch("/api/user/", {
@@ -50,10 +53,11 @@ function Dashboard() {
                         dispatch(
                             setUserDetails({
                                 isAuthenticated: true,
-                                accessToken: data.data.token,
                                 name: data.data.name,
                                 email: data.data.email,
                                 userId: data.data.id,
+                                profile_pic_uri: data.data.profile_pic_uri,
+                                status: data.data.status,
                             })
                         );
                     } else {
@@ -77,11 +81,25 @@ function Dashboard() {
     }, [isAuthenticated, history]);
     return (
         <StyledDashboard>
-            {isSearchModalOpen && <SearchUsersModal/>}
-            {isGroupModalOpen && <CreateGroupModal/>}
+            {isSearchModalOpen && <SearchUsersModal />}
+            {isGroupModalOpen && <CreateGroupModal />}
             <Sidebar />
-            {user ? <CurrentChat /> : <FeatureList />}
-            <CurrentChatProfile />
+          
+            {conversationId && conversations[conversationId] ? (
+                conversations[conversationId].type === "CONTACT" ? (
+                    <>
+                        <CurrentChat conversation={conversations[conversationId]} /> 
+                        <ContactInfoPanel />
+                    </>
+                ) : (
+                    <>
+                        <CurrentGroup conversation={conversations[conversationId]} />
+                        <GroupInfoPanel />{" "}
+                    </>
+                )
+            ) : (
+                <FeatureList />
+            )}
         </StyledDashboard>
     );
 }

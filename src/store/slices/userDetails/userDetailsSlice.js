@@ -4,10 +4,6 @@ export const userDetailsSlice = createSlice({
     name: "userDetails",
     initialState: {
         isAuthenticated: false,
-        name:"Samarpan Harit",
-        pictureUrl:"",
-        email:"",
-        accessToken:null
     },
     reducers: {
         setUserDetails:(state,action)=>{

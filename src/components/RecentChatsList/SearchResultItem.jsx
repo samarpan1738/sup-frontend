@@ -63,7 +63,8 @@ function SearchResultItem({ user, added }) {
                 Authorization: `Bearer ${userDetails.accessToken}`,
             },
             body: JSON.stringify({
-                uid: user.id,
+                users: [user.id],
+                type:"CONTACT"
             }),
         })
             .then((res) => {

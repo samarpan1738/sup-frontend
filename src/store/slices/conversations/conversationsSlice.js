@@ -9,6 +9,7 @@ export const deleteConversationMessages = createAsyncThunk(
         try {
             const res = await fetch(`${urlPrefix}/api/conversations/${conversationId}/messages`, {
                 method: "delete",
+                credentials:"include",
             });
             const data = await res.json();
             if (data.success) {
@@ -28,7 +29,9 @@ export const deleteConversationMessages = createAsyncThunk(
 
 export const fetchConversations = createAsyncThunk("conversations/fetchConversations", async ({history}, thunkAPI) => {
     try {
-        const res = await fetch(`${urlPrefix}/api/conversations`);
+        const res = await fetch(`${urlPrefix}/api/conversations`,{
+            credentials:"include",
+        });
 
         if (res.status === 401 || res.status === 403) {
             return history.push("/login");

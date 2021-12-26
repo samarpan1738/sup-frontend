@@ -82,6 +82,7 @@ const CurrentChat = React.memo(({ conversation }) => {
         if (unreadMsgIds.length > 0) {
             fetch(`${urlPrefix}/api/conversations/${currentChat.conversationId}/messages/markRead`, {
                 method: "POST",
+                credentials:"include",
                 body: JSON.stringify({
                     messageIds: unreadMsgIds.map(({ id }) => id),
                 }),

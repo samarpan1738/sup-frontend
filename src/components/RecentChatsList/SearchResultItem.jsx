@@ -62,8 +62,8 @@ function SearchResultItem({ user, added }) {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
-                Authorization: `Bearer ${userDetails.accessToken}`,
             },
+            credentials:"include",
             body: JSON.stringify({
                 users: [user.id],
                 type:"CONTACT"

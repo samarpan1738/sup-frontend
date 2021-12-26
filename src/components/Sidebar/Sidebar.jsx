@@ -49,6 +49,7 @@ function Sidebar() {
     const logout = function () {
         fetch(`${urlPrefix}/api/auth/logout`, {
             method: "GET",
+            credentials:"include",
         })
             .then((res) => {
                 if (res.status === 401 || res.status === 403) {

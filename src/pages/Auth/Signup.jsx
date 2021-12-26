@@ -30,6 +30,7 @@ function Signup() {
             headers: {
                 "Content-Type": "application/json",
             },
+            credentials:"include",
             body: JSON.stringify({
                 username: fd.get("username"),
                 password: fd.get("password"),

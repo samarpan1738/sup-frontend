@@ -7,7 +7,9 @@ export const fetchUsersByQuery = createAsyncThunk("searchUsers/fetchUsersByQuery
     try {
         // const accessToken = thunkAPI.getState().userDetails.accessToken;
         console.log(queryText);
-        const response = await fetch(`${urlPrefix}/api/user/search?query=${queryText}`);
+        const response = await fetch(`${urlPrefix}/api/user/search?query=${queryText}`,{
+            credentials:"include",
+        });
         const data = response.json();
         return data;
     } catch (error) {

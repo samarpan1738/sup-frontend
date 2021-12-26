@@ -47,6 +47,7 @@ function CreateGroupModal() {
             headers: {
                 "Content-type": "application/json",
             },
+            credentials:"include",
             body: JSON.stringify({
                 type: "GROUP",
                 users,

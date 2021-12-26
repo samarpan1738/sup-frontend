@@ -35,6 +35,7 @@ function Dashboard() {
         if (isAuthenticated === undefined || isAuthenticated === null || isAuthenticated === false) {
             fetch(`${urlPrefix}/api/user/`, {
                 method: "GET",
+                credentials:"include",
             })
                 .then((res) => {
                     if (res.status === 401 || res.status === 403) {

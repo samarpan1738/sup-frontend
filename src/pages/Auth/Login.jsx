@@ -32,6 +32,7 @@ function Login() {
             headers: {
                 "Content-Type": "application/json",
             },
+            credentials:"include",
             body: JSON.stringify({
                 username: fd.get("username"),
                 password: fd.get("password"),
@@ -84,6 +85,7 @@ function Login() {
         if (isAuthenticated === false) {
             fetch(`${urlPrefix}/api/user/`, {
                 method: "GET",
+                credentials:"include",
             })
                 .then((res) => {
                     if (res.status === 401 || res.status === 403) {

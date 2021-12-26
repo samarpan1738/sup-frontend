@@ -40,7 +40,10 @@ export const getTimeStamp = (lastActive) => {
             })
         );
 };
-
+const urlPrefix =
+    process.env.NODE_ENV === "development"
+        ? process.env.REACT_APP_BACKEND_TEST_URL
+        : process.env.REACT_APP_BACKEND_PROD_URL;
 function CurrentGroup({ conversation }) {
     const menuRef = useRef(null);
     const [menu, setMenu] = useState(false);
@@ -55,11 +58,11 @@ function CurrentGroup({ conversation }) {
     const toast = useToast();
     const dispatch = useDispatch();
     const currentChat = useSelector((store) => store.currentChat);
-    const { accessToken, isAuthenticated, userId } = useSelector((store) => store.userDetails);
+    const { accessToken, userId } = useSelector((store) => store.userDetails);
 
     const clearChat = () => {
         toggleMenuState();
-        fetch(`/api/conversations/${currentChat.conversationId}/messages`, {
+        fetch(`${urlPrefix}/api/conversations/${currentChat.conversationId}/messages`, {
             method: "delete",
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -100,11 +103,8 @@ function CurrentGroup({ conversation }) {
             });
         });
         if (unreadMsgIds.length > 0) {
-            fetch(`/api/conversations/${currentChat.conversationId}/messages/markRead`, {
+            fetch(`${urlPrefix}/api/conversations/${currentChat.conversationId}/messages/markRead`, {
                 method: "POST",
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
                 body: JSON.stringify({
                     messageIds: unreadMsgIds.map(({ id }) => id),
                 }),
@@ -115,7 +115,7 @@ function CurrentGroup({ conversation }) {
                 });
             dispatch(markMessagesRead({ conversationId: currentChat.conversationId.toString(), unreadMsgIds }));
         }
-    }, [currentChat.conversationId, conversation.messages]);
+    }, [currentChat.conversationId, conversation.messages, dispatch]);
     // console.log("Current chat re-render")
     return (
         <StyledSection style={styles}>

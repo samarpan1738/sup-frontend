@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUsersByQuery, setModalOpen, setQueryText } from "../../store/slices/searchUsers/searchUsersSlice";
+import { fetchUsersByQuery, setQueryText } from "../../store/slices/searchUsers/searchUsersSlice";
 import Modal from "../Modal/Modal";
 import SearchResultItem from "../RecentChatsList/SearchResultItem";
 import {
@@ -21,7 +21,7 @@ function SearchUsersModal() {
     const conversationIds=Object.keys(conversations)
     const { userId } = useSelector((state) => state.userDetails);
 
-    const contacts = Object.keys(conversations).filter((key) => conversations[key].type === "CONTACT");
+    const contacts = conversationIds.filter((key) => conversations[key].type === "CONTACT");
     const contactUserIds = contacts.map((contactId) => {
         // console.log(conversations[contactId].users);
         const userObj =

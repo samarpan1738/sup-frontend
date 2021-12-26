@@ -9,7 +9,7 @@ function Modal({children,target}) {
         e.stopPropagation();
         dispatch(setModalOpen({target,value:false}));
         // Close search modal
-    }, []);
+    }, [dispatch,target]);
     return (
         <StyledModal onClick={handleClickOutside}>
            {children}

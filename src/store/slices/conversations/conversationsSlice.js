@@ -1,29 +1,22 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
+const urlPrefix =
+    process.env.NODE_ENV === "development"
+        ? process.env.REACT_APP_BACKEND_TEST_URL
+        : process.env.REACT_APP_BACKEND_PROD_URL;
 export const deleteConversationMessages = createAsyncThunk(
     "conversations/clearChat",
     async ({ conversationId }, thunkAPI) => {
         try {
-            const res = await fetch(`/api/conversations/${conversationId}/messages`, {
+            const res = await fetch(`${urlPrefix}/api/conversations/${conversationId}/messages`, {
                 method: "delete",
             });
             const data = await res.json();
             if (data.success) {
                 // dispatch(setConversationMessages({ id: conversationId, data: {} }));
+             
                 return { id: conversationId, data: {} };
-                // toast({
-                //     title: data.message,
-                //     status: "success",
-                //     duration: 5000,
-                //     isClosable: true,
-                // });
             } else {
-                // toast({
-                //     title: "Unable to clear chat",
-                //     status: "error",
-                //     duration: 5000,
-                //     isClosable: true,
-                // });
+                
                 thunkAPI.rejectWithValue("Unable to clear chat");
             }
             return data;
@@ -35,7 +28,7 @@ export const deleteConversationMessages = createAsyncThunk(
 
 export const fetchConversations = createAsyncThunk("conversations/fetchConversations", async ({history}, thunkAPI) => {
     try {
-        const res = await fetch("/api/conversations");
+        const res = await fetch(`${urlPrefix}/api/conversations`);
 
         if (res.status === 401 || res.status === 403) {
             return history.push("/login");

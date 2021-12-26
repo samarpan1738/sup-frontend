@@ -5,7 +5,6 @@ import { ReactComponent as MenuIcon } from "../../assets/images/menu.svg";
 import { ReactComponent as ChatIcon } from "../../assets/images/chat.svg";
 import { ReactComponent as SearchIcon } from "../../assets/images/search_topbar.svg";
 import { ReactComponent as CloseIcon } from "../../assets/images/close.svg";
-import { useSelector } from "react-redux";
 export const StyledTopBar = styled.div`
     display: flex;
     height: 55px;

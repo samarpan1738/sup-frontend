@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchTrendingGifs } from "../../store/slices/gifs/gifsSlice";
 import { sendViaSocket } from "../../store/slices/socket/socketSlice";
@@ -9,11 +9,13 @@ import { GifContainer, GifSearchBar, GifPreview, GifSearchBarInput, StyledGifPan
 function GifPanel({ conversationId, userId }) {
     const gifs = useSelector((state) => state.gifs);
     const dispatch = useDispatch();
-    useEffect(async () => {
-        if (gifs.trending.length === 0) {
-            dispatch(fetchTrendingGifs());
-        }
-    }, []);
+    useEffect(()=>{
+        (async () => {
+            if (gifs.trending.length === 0) {
+                dispatch(fetchTrendingGifs());
+            }
+        })()
+    }, [dispatch, gifs.trending.length]);
     const sendImgMessage = (url) => {
         dispatch(
             sendViaSocket({

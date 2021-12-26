@@ -1,5 +1,5 @@
 import { useToast } from "@chakra-ui/react";
-import React, { useCallback, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { setModalOpen } from "../../store/slices/modal/modalSlice";
@@ -7,20 +7,19 @@ import { StyledClosePanelIcon } from "../CurrentChat/styledComponents";
 import Modal from "../Modal/Modal";
 import { StyledModalBox, StyledSelect } from "./styles";
 
-const options = [
-    { value: "1", label: "Samarpan" },
-    { value: "2", label: "David" },
-    { value: "3", label: "John" },
-];
+const urlPrefix =
+    process.env.NODE_ENV === "development"
+        ? process.env.REACT_APP_BACKEND_TEST_URL
+        : process.env.REACT_APP_BACKEND_PROD_URL;
 function CreateGroupModal() {
     const dispatch = useDispatch();
     const conversations = useSelector((state) => state.conversations);
     const { userId } = useSelector((state) => state.userDetails);
-    const [selectedOptions,setSelectedOptions]=useState([]);
+    const [selectedOptions, setSelectedOptions] = useState([]);
     const contacts = Object.keys(conversations).filter((key) => conversations[key].type === "CONTACT");
     const options = contacts.map((contactId) => {
         console.log(conversations[contactId].users);
-        const userIds=Object.keys(conversations[contactId].users);
+        const userIds = Object.keys(conversations[contactId].users);
         const userObj =
             userIds[0] != userId
                 ? conversations[contactId].users[userIds[0]]
@@ -30,27 +29,29 @@ function CreateGroupModal() {
             value: `${userObj.id}`,
         };
     });
-    const toast=useToast();
-    const history=useHistory();
+    const toast = useToast();
+    const history = useHistory();
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        const fd=new FormData(e.target)
-        console.log(`fd.get("group_name") : ${fd.get("group_name")} , fd.get("group_members") : ${fd.get("group_members")}`)
-        const title=fd.get("group_name");
-        const description=fd.get("group_description");
-        const users=selectedOptions.map(({value})=>{
+        const fd = new FormData(e.target);
+        console.log(
+            `fd.get("group_name") : ${fd.get("group_name")} , fd.get("group_members") : ${fd.get("group_members")}`
+        );
+        const title = fd.get("group_name");
+        const description = fd.get("group_description");
+        const users = selectedOptions.map(({ value }) => {
             return value;
-        })
-        fetch("/api/conversations/", {
+        });
+        fetch(`${urlPrefix}/api/conversations/`, {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
             },
             body: JSON.stringify({
-                type:"GROUP",
+                type: "GROUP",
                 users,
                 title,
-                description
+                description,
             }),
         })
             .then((res) => {
@@ -86,13 +87,13 @@ function CreateGroupModal() {
         // const groupMembers = e.target.elements.groupMembers.value;
         // dispatch({ type: "CREATE_GROUP", payload: { groupName, groupMembers } });
     };
-    const closeModal=()=>{
-        console.log("closeModal method")
-        dispatch(setModalOpen({target:"createGroup",value:false}));
-    }
-    const handleChange=(selectedOptions)=>{
+    const closeModal = () => {
+        console.log("closeModal method");
+        dispatch(setModalOpen({ target: "createGroup", value: false }));
+    };
+    const handleChange = (selectedOptions) => {
         setSelectedOptions(selectedOptions);
-    }
+    };
 
     // console.log("options : ", options);
     useEffect(() => {}, []);
@@ -100,15 +101,23 @@ function CreateGroupModal() {
         <Modal target="createGroup">
             <StyledModalBox onClick={(e) => e.stopPropagation()}>
                 <div
-                    style={{ marginBottom: "12px", borderBottom: "1px solid var(--background4)", padding: "0 0 10px" ,display:"flex",justifyContent:"space-between"}}
+                    style={{
+                        marginBottom: "12px",
+                        borderBottom: "1px solid var(--background4)",
+                        padding: "0 0 10px",
+                        display: "flex",
+                        justifyContent: "space-between",
+                    }}
                 >
                     <h1>Create Group</h1>
                     {/* <button>Close</button> */}
-                    <StyledClosePanelIcon aria-label="Close create group modal" onClick={closeModal}/>
+                    <StyledClosePanelIcon aria-label="Close create group modal" onClick={closeModal} />
                 </div>
                 <form onSubmit={handleFormSubmit}>
                     <div className="flex flex-col mb-4">
-                        <label htmlFor="group_name" className="text-sm mb-1 px-2">Title</label>
+                        <label htmlFor="group_name" className="text-sm mb-1 px-2">
+                            Title
+                        </label>
                         <input
                             type="text"
                             name="group_name"
@@ -118,7 +127,9 @@ function CreateGroupModal() {
                         />
                     </div>
                     <div className="flex flex-col mb-4">
-                        <label htmlFor="group_name" className="text-sm mb-1 px-2">Description</label>
+                        <label htmlFor="group_name" className="text-sm mb-1 px-2">
+                            Description
+                        </label>
                         <input
                             type="text"
                             name="group_description"
@@ -128,8 +139,16 @@ function CreateGroupModal() {
                         />
                     </div>
                     <div className="flex flex-col mb-1">
-                        <label htmlFor="group_members" className="text-sm mb-1">Participants</label>
-                        <StyledSelect onChange={handleChange} name="group_members" id="group_members" options={options} isMulti={true} />
+                        <label htmlFor="group_members" className="text-sm mb-1">
+                            Participants
+                        </label>
+                        <StyledSelect
+                            onChange={handleChange}
+                            name="group_members"
+                            id="group_members"
+                            options={options}
+                            isMulti={true}
+                        />
                     </div>
                     <button
                         style={{

@@ -13,6 +13,10 @@ import {
     StyledH1,
     SignupCTA,
 } from "./styles";
+const urlPrefix =
+    process.env.NODE_ENV === "development"
+        ? process.env.REACT_APP_BACKEND_TEST_URL
+        : process.env.REACT_APP_BACKEND_PROD_URL;
 function Signup() {
     const { isAuthenticated } = useSelector((state) => state.userDetails);
     const history = useHistory();
@@ -21,7 +25,7 @@ function Signup() {
         e.preventDefault();
         const fd = new FormData(e.currentTarget);
 
-        fetch("/api/auth/signup", {
+        fetch(`${urlPrefix}/api/auth/signup`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -66,7 +70,7 @@ function Signup() {
         if (isAuthenticated === true) {
             history.push("/dashboard");
         }
-    }, [isAuthenticated]);
+    }, [isAuthenticated,history]);
     return (
         <StyledAuthPage>
             <StyledForm onSubmit={loginUser}>

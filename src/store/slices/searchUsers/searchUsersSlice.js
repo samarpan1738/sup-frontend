@@ -1,10 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
+const urlPrefix =
+    process.env.NODE_ENV === "development"
+        ? process.env.REACT_APP_BACKEND_TEST_URL
+        : process.env.REACT_APP_BACKEND_PROD_URL;
 export const fetchUsersByQuery = createAsyncThunk("searchUsers/fetchUsersByQuery", async (queryText, thunkAPI) => {
     try {
         // const accessToken = thunkAPI.getState().userDetails.accessToken;
         console.log(queryText);
-        const response = await fetch(`/api/user/search?query=${queryText}`);
+        const response = await fetch(`${urlPrefix}/api/user/search?query=${queryText}`);
         const data = response.json();
         return data;
     } catch (error) {

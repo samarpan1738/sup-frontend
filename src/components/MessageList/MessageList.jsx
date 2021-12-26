@@ -1,13 +1,10 @@
 import React, { useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import {
-    StyledMessageBox,
     StyledMessagesList,
-    StyledMessagesListItem,
     StyledDateLabel,
     StyledMessageGroup,
     NoMessagesLabel,
-    StyledGifBox,
 } from "../CurrentChat/styledComponents";
 import MessageListItem from "./MessageListItem";
 

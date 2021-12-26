@@ -1,5 +1,4 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { StyledGifBox, StyledMessageBox, StyledMessagesListItem } from "../CurrentGroup/styles";
 
 const getMessageTimestamp = (createdAt) => {

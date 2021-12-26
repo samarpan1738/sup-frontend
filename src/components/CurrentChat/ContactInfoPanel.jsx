@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import TopBar, { iconMappings, StyledIconContainer, StyledMenu } from "../../globals/styledComponents/TopBar";
+import TopBar, { iconMappings, StyledIconContainer } from "../../globals/styledComponents/TopBar";
 import StyledSection from "../../globals/styledComponents/StyledSection";
 import { setIsProfileOpen } from "../../store/slices/currentChat/currentChatSlice";
 import { Avatar } from "@chakra-ui/react";

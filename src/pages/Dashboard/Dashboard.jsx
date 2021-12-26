@@ -5,7 +5,6 @@ import CurrentChat from "../../components/CurrentChat/CurrentChat";
 import ContactInfoPanel from "../../components/CurrentChat/ContactInfoPanel";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import { sendViaSocket, socket } from "../../store/slices/socket/socketSlice";
 import FeatureList from "../../components/FeatureList/FeatureList";
 import { setUserDetails } from "../../store/slices/userDetails/userDetailsSlice";
 import SearchUsersModal from "../../components/SearchUsersModal/SearchUsersModal";
@@ -20,18 +19,21 @@ const StyledDashboard = styled.div`
     width: 100%;
     display: flex;
 `;
-
+const urlPrefix =
+    process.env.NODE_ENV === "development"
+        ? process.env.REACT_APP_BACKEND_TEST_URL
+        : process.env.REACT_APP_BACKEND_PROD_URL;
 function Dashboard() {
     const history = useHistory();
     const dispatch = useDispatch();
     const { isAuthenticated } = useSelector((state) => state.userDetails);
-    const { user, conversationId } = useSelector((state) => state.currentChat);
+    const { conversationId } = useSelector((state) => state.currentChat);
     const conversations = useSelector((state) => state.conversations);
     // const {isModalOpen}=useSelector(state => state.searchUsers);
     const { search: isSearchModalOpen, createGroup: isGroupModalOpen } = useSelector((state) => state.modal);
     useEffect(() => {
         if (isAuthenticated === undefined || isAuthenticated === null || isAuthenticated === false) {
-            fetch("/api/user/", {
+            fetch(`${urlPrefix}/api/user/`, {
                 method: "GET",
             })
                 .then((res) => {
@@ -74,7 +76,7 @@ function Dashboard() {
                 });
             // history.push("/login");
         }
-    }, [history]);
+    }, [history,dispatch,isAuthenticated]);
     useEffect(() => {
         if (isAuthenticated === undefined || isAuthenticated === null || isAuthenticated === false)
             history.push("/login");

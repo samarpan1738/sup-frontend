@@ -55,6 +55,6 @@ export const socketSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {} = socketSlice.actions;
+// export const {} = socketSlice.actions;
 export default socketSlice.reducer;
 

@@ -3,8 +3,6 @@ import TopBar, { iconMappings, StyledIconContainer, StyledMenu } from "../../glo
 import StyledSection from "../../globals/styledComponents/StyledSection";
 import List from "../RecentChatsList/List";
 import { useDispatch, useSelector } from "react-redux";
-import { setDashboard } from "../../store/slices/dashboard/dashboardSlice";
-import SearchUsers from "../SearchUsers/SearchUsers";
 import { socket } from "../../store/slices/socket/socketSlice";
 import { addMessageToConversation, fetchConversations } from "../../store/slices/conversations/conversationsSlice";
 import styled from "styled-components";
@@ -24,9 +22,12 @@ const DropdownMenuItem = styled.div`
         border-bottom: 0.8px solid var(--background4);
     }
 `;
-
+const urlPrefix =
+    process.env.NODE_ENV === "development"
+        ? process.env.REACT_APP_BACKEND_TEST_URL
+        : process.env.REACT_APP_BACKEND_PROD_URL;
 function Sidebar() {
-    const { isAuthenticated, accessToken, userId, profile_pic_uri } = useSelector((state) => state.userDetails);
+    const { isAuthenticated, userId, profile_pic_uri } = useSelector((state) => state.userDetails);
     const history = useHistory();
     const dispatch = useDispatch();
     const currentChat = useSelector((state) => state.currentChat);
@@ -44,9 +45,9 @@ function Sidebar() {
             dispatch(fetchConversations({history}));
 
         }
-    }, [isAuthenticated, accessToken]);
+    }, [isAuthenticated, dispatch, history]);
     const logout = function () {
-        fetch("/api/auth/logout", {
+        fetch(`${urlPrefix}/api/auth/logout`, {
             method: "GET",
         })
             .then((res) => {
@@ -66,7 +67,8 @@ function Sidebar() {
                 console.log(err);
             });
     };
-
+    const conversationIds=Object.keys(conversations)
+    const conversationsLength=conversationIds.length;
     useEffect(() => {
         // console.log("Setting message event listener");
         socket.removeAllListeners("message");
@@ -79,16 +81,16 @@ function Sidebar() {
             );
         });
         // console.log("message event listeners : ", socket.listeners("message"));
-    }, [currentChat.conversationId]);
+    }, [currentChat.conversationId, dispatch, userId]);
     useEffect(() => {
         // console.log("conversations.length : ", Object.keys(conversations).length);
         // console.log("conversations : ",conversations)
-        if (Object.keys(conversations).length > 0)
+        if (conversationsLength > 0)
             socket.emit(
                 "joinRooms",
-                Object.keys(conversations).map((id) => id.toString())
+                conversationIds.map((id) => id.toString())
             );
-    }, [Object.keys(conversations).length]);
+    }, [conversationsLength,conversationIds]);
     return (
         <StyledSection style={styles}>
             <TopBar avatarUri={profile_pic_uri}>

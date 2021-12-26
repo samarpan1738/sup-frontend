@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Avatar, useToast } from "@chakra-ui/react";
-import { useDispatch, useSelector } from "react-redux";
-import { setCurrentChat } from "../../store/slices/currentChat/currentChatSlice";
+import { useSelector } from "react-redux";
 import { StyledDetailsContainer } from "./styles";
 import styled from "styled-components";
 import { useHistory } from "react-router";
-const SRI_StyledDetailsContainer = styled(StyledDetailsContainer)`
+const SriStyledDetailsContainer = styled(StyledDetailsContainer)`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -40,7 +39,10 @@ const StyledListItem = styled.div`
         background-color: var(--background4);
     }
 `;
-
+const urlPrefix =
+    process.env.NODE_ENV === "development"
+        ? process.env.REACT_APP_BACKEND_TEST_URL
+        : process.env.REACT_APP_BACKEND_PROD_URL;
 function SearchResultItem({ user, added }) {
     const history = useHistory();
     const userDetails = useSelector((state) => state.userDetails);
@@ -56,7 +58,7 @@ function SearchResultItem({ user, added }) {
         setHovered(false);
     }
     const addUser = () => {
-        fetch("/api/conversations/", {
+        fetch(`${urlPrefix}/api/conversations/`, {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
@@ -100,7 +102,7 @@ function SearchResultItem({ user, added }) {
     return (
         <StyledListItem>
             <Avatar src={user.profile_pic_uri} width="38px" height="38px" />
-            <SRI_StyledDetailsContainer>
+            <SriStyledDetailsContainer>
                 <div>
                     <p>
                         <span>{user.name}</span>
@@ -117,7 +119,7 @@ function SearchResultItem({ user, added }) {
                         <AddedButton onClick={addUser}>{added === -1 ? "added" : "add"}</AddedButton>
                     )} */}
                 </div>
-            </SRI_StyledDetailsContainer>
+            </SriStyledDetailsContainer>
         </StyledListItem>
     );
 }

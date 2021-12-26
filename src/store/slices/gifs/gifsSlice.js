@@ -1,8 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
+const urlPrefix =
+    process.env.NODE_ENV === "development"
+        ? process.env.REACT_APP_BACKEND_TEST_URL
+        : process.env.REACT_APP_BACKEND_PROD_URL;
 export const fetchTrendingGifs = createAsyncThunk("gifs/fetchTrendingGifs", async (queryText, thunkAPI) => {
     try {
-        const response = await fetch("/api/gif/trending?limit=30");
+        const response = await fetch(`${urlPrefix}/api/gif/trending?limit=30`);
         const data = await response.json();
         return data.data;
     } catch (error) {

@@ -10,8 +10,7 @@ import {
     StyledClosePanelIcon,
 } from "./styledComponents";
 import { setIsProfileOpen } from "../../store/slices/currentChat/currentChatSlice";
-import { deleteConversationMessages, markMessagesRead, setConversationMessages } from "../../store/slices/conversations/conversationsSlice";
-import { useToast } from "@chakra-ui/react";
+import { deleteConversationMessages, markMessagesRead } from "../../store/slices/conversations/conversationsSlice";
 import MessageBox from "../MessageBox/MessageBox";
 import MessageList from "../MessageList/MessageList";
 import GifPanel from "../GifPanel/GifPanel";
@@ -46,7 +45,10 @@ export const getTimeStamp = (lastActive) => {
             })
         );
 };
-
+const urlPrefix =
+    process.env.NODE_ENV === "development"
+        ? process.env.REACT_APP_BACKEND_TEST_URL
+        : process.env.REACT_APP_BACKEND_PROD_URL;
 const CurrentChat = React.memo(({ conversation }) => {
     console.log("Rendering current chat");
     const menuRef = useRef(null);
@@ -58,15 +60,13 @@ const CurrentChat = React.memo(({ conversation }) => {
     const toggleGifPanel = () => {
         setGifPanelState((prevState) => !prevState);
     };
-
-    const toast = useToast();
     const dispatch = useDispatch();
     const currentChat = useSelector((store) => store.currentChat);
-    const { accessToken, userId } = useSelector((store) => store.userDetails);
+    const { userId } = useSelector((store) => store.userDetails);
 
     const clearChat = () => {
         toggleMenuState();
-        dispatch(deleteConversationMessages({conversationId:conversation.id,}));
+        dispatch(deleteConversationMessages({conversationId:conversation.id}));
     };
     useEffect(() => {
         // Api call to mark all unread messages as read
@@ -80,11 +80,8 @@ const CurrentChat = React.memo(({ conversation }) => {
             });
         });
         if (unreadMsgIds.length > 0) {
-            fetch(`/api/conversations/${conversation.id}/messages/markRead`, {
+            fetch(`${urlPrefix}/api/conversations/${currentChat.conversationId}/messages/markRead`, {
                 method: "POST",
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
                 body: JSON.stringify({
                     messageIds: unreadMsgIds.map(({ id }) => id),
                 }),
@@ -95,7 +92,7 @@ const CurrentChat = React.memo(({ conversation }) => {
                 });
             dispatch(markMessagesRead({ conversationId: currentChat.conversationId.toString(), unreadMsgIds }));
         }
-    }, [currentChat.conversationId, conversation.messages]);
+    }, [currentChat.conversationId, conversation.messages,dispatch]);
     // console.log("Current chat re-render")
     return (
         <StyledSection style={styles}>

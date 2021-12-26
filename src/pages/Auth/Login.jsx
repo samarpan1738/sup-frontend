@@ -14,6 +14,10 @@ import {
     StyledH1,
     SignupCTA,
 } from "./styles";
+const urlPrefix =
+    process.env.NODE_ENV === "development"
+        ? process.env.REACT_APP_BACKEND_TEST_URL
+        : process.env.REACT_APP_BACKEND_PROD_URL;
 function Login() {
     const { isAuthenticated } = useSelector((state) => state.userDetails);
     let dispatch = useDispatch();
@@ -23,7 +27,7 @@ function Login() {
         e.preventDefault();
         const fd = new FormData(e.currentTarget);
 
-        fetch("/api/auth/login", {
+        fetch(`${urlPrefix}/api/auth/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -74,11 +78,11 @@ function Login() {
         if (isAuthenticated === true) {
             history.push("/dashboard");
         }
-    }, [isAuthenticated]);
+    }, [isAuthenticated,history]);
     useEffect(() => {
         console.log("isAuthenticated", isAuthenticated);
         if (isAuthenticated === false) {
-            fetch("/api/user/", {
+            fetch(`${urlPrefix}/api/user/`, {
                 method: "GET",
             })
                 .then((res) => {
@@ -106,7 +110,7 @@ function Login() {
                     console.log(err);
                 });
         }
-    }, []);
+    }, [dispatch, isAuthenticated]);
     return (
         <StyledAuthPage>
             <StyledForm onSubmit={loginUser}>

@@ -34,7 +34,8 @@ export const fetchConversations = createAsyncThunk("conversations/fetchConversat
         });
 
         if (res.status === 401 || res.status === 403) {
-            return history.push("/login");
+            // Handle this error
+            return 
         }
 
         const data = await res.json();

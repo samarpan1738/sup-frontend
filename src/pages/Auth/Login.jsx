@@ -19,6 +19,7 @@ const urlPrefix =
         ? process.env.REACT_APP_BACKEND_TEST_URL
         : process.env.REACT_APP_BACKEND_PROD_URL;
 function Login() {
+    console.log("Login urlPrefix : ",urlPrefix)
     const { isAuthenticated } = useSelector((state) => state.userDetails);
     let dispatch = useDispatch();
     const toast = useToast();
@@ -32,7 +33,7 @@ function Login() {
             headers: {
                 "Content-Type": "application/json",
             },
-            credentials:"include",
+            credentials:"same-origin",
             body: JSON.stringify({
                 username: fd.get("username"),
                 password: fd.get("password"),
@@ -95,7 +96,7 @@ function Login() {
                 })
                 .then((data) => {
                     console.log(data);
-                    if (data !== null && data.success === true) {
+                    if (data !== undefined && data.success === true) {
                         dispatch(
                             setUserDetails({
                                 isAuthenticated: true,

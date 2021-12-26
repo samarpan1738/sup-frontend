@@ -46,7 +46,7 @@ function Dashboard() {
                 .then((data) => {
                     console.log(data);
                     // alert(data.message);
-                    if (data.success === true) {
+                    if (data !== undefined && data.success === true) {
                         // toast({
                         //     title: data.message,
                         //     status: "success",

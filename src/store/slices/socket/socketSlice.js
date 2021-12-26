@@ -1,7 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {io} from "socket.io-client";
-
-export const socket = io("http://localhost:2000");
+const urlPrefix =
+    process.env.NODE_ENV === "development"
+        ? "http://localhost:2000"
+        : process.env.REACT_APP_BACKEND_PROD_URL;
+console.log("socketSlice urlPrefix : ",urlPrefix)
+export const socket = io(urlPrefix);
 socket.on("connect", (data) => {
     console.log("Connected to socket server");
     

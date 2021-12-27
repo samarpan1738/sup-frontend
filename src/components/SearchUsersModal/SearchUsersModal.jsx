@@ -25,9 +25,9 @@ function SearchUsersModal() {
     const contactUserIds = contacts.map((contactId) => {
         // console.log(conversations[contactId].users);
         const userObj =
-            conversations[contactId].users[0].user.id !== userId
-                ? conversations[contactId].users[0].user
-                : conversations[contactId].users[1].user;
+            conversations[contactId].users[0].id != userId
+                ? conversations[contactId].users[0]
+                : conversations[contactId].users[1];
         return userObj.id;
     });
 

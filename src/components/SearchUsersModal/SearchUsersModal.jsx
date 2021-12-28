@@ -18,16 +18,18 @@ function SearchUsersModal() {
     const dispatch = useDispatch();
     const { queryText, searchResults } = useSelector((state) => state.searchUsers);
     const conversations = useSelector((state) => state.conversations);
-    const conversationIds=Object.keys(conversations)
+    const conversationIds = Object.keys(conversations);
     const { userId } = useSelector((state) => state.userDetails);
 
     const contacts = conversationIds.filter((key) => conversations[key].type === "CONTACT");
     const contactUserIds = contacts.map((contactId) => {
-        // console.log(conversations[contactId].users);
+        // This is a map
+        console.log(conversations[contactId].users);
+        const userIds = Object.keys(conversations[contactId].users);
         const userObj =
-            conversations[contactId].users[0].id != userId
-                ? conversations[contactId].users[0]
-                : conversations[contactId].users[1];
+            userIds[0] != userId
+                ? conversations[contactId].users[userIds[0]]
+                : conversations[contactId].users[userIds[1]];
         return userObj.id;
     });
 
@@ -62,7 +64,13 @@ function SearchUsersModal() {
                     ) : searchResults.length > 0 ? (
                         <ModalDropdownContainer>
                             {searchResults.map((user) => {
-                                return <SearchResultItem key={user.id} user={user} added={contactUserIds.indexOf(user.id)!== -1} />;
+                                return (
+                                    <SearchResultItem
+                                        key={user.id}
+                                        user={user}
+                                        added={contactUserIds.indexOf(user.id) !== -1}
+                                    />
+                                );
                             })}
                         </ModalDropdownContainer>
                     ) : (

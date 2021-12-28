@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const dashboardSlice = createSlice({
     name: "dashboard",
     initialState: {
-        recentChats: [],
+        loading:true
     },
     reducers: {
         setDashboard: (state, action) => {

@@ -42,14 +42,13 @@ function Sidebar() {
     };
     useEffect(() => {
         if (isAuthenticated === true) {
-            dispatch(fetchConversations({history}));
-
+            dispatch(fetchConversations({ history }));
         }
     }, [isAuthenticated, dispatch, history]);
     const logout = function () {
         fetch(`${urlPrefix}/api/auth/logout`, {
             method: "GET",
-            credentials:"include",
+            credentials: "include",
         })
             .then((res) => {
                 if (res.status === 401 || res.status === 403) {
@@ -59,17 +58,15 @@ function Sidebar() {
             })
             .then((data) => {
                 if (data.success) {
-                    dispatch(setUserDetails({ isAuthenticated: false }));
-                    // dispatch(socket({ type: "logout" }));
-                    // dispatch({ type: "LOGOUT" });
+                    dispatch(setUserDetails({ isAuthenticated: false, tokenExpired: true }));
                 }
             })
             .catch((err) => {
                 console.log(err);
             });
     };
-    const conversationIds=Object.keys(conversations)
-    const conversationsLength=conversationIds.length;
+    const conversationIds = Object.keys(conversations);
+    const conversationsLength = conversationIds.length;
     useEffect(() => {
         // console.log("Setting message event listener");
         socket.removeAllListeners("message");
@@ -91,7 +88,7 @@ function Sidebar() {
                 "joinRooms",
                 conversationIds.map((id) => id.toString())
             );
-    }, [conversationsLength,conversationIds]);
+    }, [conversationsLength, conversationIds]);
     return (
         <StyledSection style={styles}>
             <TopBar avatarUri={profile_pic_uri}>

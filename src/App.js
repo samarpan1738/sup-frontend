@@ -62,7 +62,10 @@ function App() {
                 }
             })
             .catch((err) => {
-                console.log(err);
+                setUserDetails({
+                    isAuthenticated: false,
+                    tokenExpired: true,
+                })
             });
     }
     const isLoading = isAuthenticated === false && tokenExpired === false;

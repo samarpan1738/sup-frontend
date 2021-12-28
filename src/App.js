@@ -59,6 +59,11 @@ function App() {
                             status: data.data.status,
                         })
                     );
+                } else {
+                    setUserDetails({
+                        isAuthenticated: false,
+                        tokenExpired: true,
+                    })
                 }
             })
             .catch((err) => {

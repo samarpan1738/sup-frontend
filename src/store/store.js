@@ -4,7 +4,6 @@ import transactionsReducer from "./slices/transactions/transactionsSlice";
 import dashboardReducer from "./slices/dashboard/dashboardSlice";
 import currentChatReducer from "./slices/currentChat/currentChatSlice";
 import socketReducer from "./slices/socket/socketSlice";
-import asyncThunkReducer from "./middlewares/index";
 import searchUsersReducer from "./slices/searchUsers/searchUsersSlice";
 import conversationsReducer from "./slices/conversations/conversationsSlice";
 import gifsReducer from "./slices/gifs/gifsSlice";
@@ -19,7 +18,6 @@ export default configureStore(
             dashboard: dashboardReducer,
             currentChat: currentChatReducer,
             socket: socketReducer,
-            users: asyncThunkReducer,
             searchUsers: searchUsersReducer,
             conversations: conversationsReducer,
             gifs:gifsReducer,

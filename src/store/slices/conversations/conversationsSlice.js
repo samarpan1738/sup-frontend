@@ -3,21 +3,21 @@ const urlPrefix =
     process.env.NODE_ENV === "development"
         ? process.env.REACT_APP_BACKEND_TEST_URL
         : process.env.REACT_APP_BACKEND_PROD_URL;
+
 export const deleteConversationMessages = createAsyncThunk(
     "conversations/clearChat",
     async ({ conversationId }, thunkAPI) => {
         try {
             const res = await fetch(`${urlPrefix}/api/conversations/${conversationId}/messages`, {
                 method: "delete",
-                credentials:"include",
+                credentials: "include",
             });
             const data = await res.json();
             if (data.success) {
                 // dispatch(setConversationMessages({ id: conversationId, data: {} }));
-             
+
                 return { id: conversationId, data: {} };
             } else {
-                
                 thunkAPI.rejectWithValue("Unable to clear chat");
             }
             return data;
@@ -27,50 +27,65 @@ export const deleteConversationMessages = createAsyncThunk(
     }
 );
 
-export const fetchConversations = createAsyncThunk("conversations/fetchConversations", async ({history}, thunkAPI) => {
-    try {
-        const res = await fetch(`${urlPrefix}/api/conversations`,{
-            credentials:"include",
+export const fetchConversations = createAsyncThunk(
+    "conversations/fetchConversations",
+    async ({ history }, thunkAPI) => {
+        try {
+            const res = await fetch(`${urlPrefix}/api/conversations`, {
+                credentials: "include",
+            });
+
+            if (res.status === 401 || res.status === 403) {
+                // Handle this error
+                return;
+            }
+
+            const data = await res.json();
+            console.log(data);
+
+            if (data.success === true) {
+                return data.data;
+            }
+        } catch (error) {
+            console.log(error);
+            thunkAPI.rejectWithValue("Error fetching conversations");
+        }
+    }
+);
+export const addConversation = createAsyncThunk(
+    "conversations/addConversation",
+    async ({ userId, type, history }, thunkApi) => {
+        const res = await fetch(`${urlPrefix}/api/conversations/`, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                users: [userId],
+                type,
+            }),
         });
 
         if (res.status === 401 || res.status === 403) {
-            // Handle this error
-            return 
+            return history.push("/login");
         }
-
         const data = await res.json();
-        console.log(data);
-        
-        if (data.success === true) {
-            const conversationSliceInp = {};
-            data.data.forEach((conv) => {
-                console.log("conv :", conv);
-                // conv.unreadCounter=0;
-                conv = { ...conv, unreadCounter: 0 };
-                const conversationUsersObj={};
-                conv.users.forEach(({user})=>{
-                    conversationUsersObj[user.id]=user;
-                })
-                conv.users=conversationUsersObj;
-                conversationSliceInp[conv.id.toString()] = conv;
-            });
-            
-            console.log("conversationSliceInp : ", conversationSliceInp);
-            return conversationSliceInp;
+
+        console.log("data : ", data);
+        if (data.success) {
+            return data.data;
+        } else {
+            thunkApi.rejectWithValue("Error adding conversation");
         }
-    } catch (error) {
-        console.log(error)
-        thunkAPI.rejectWithValue("Error fetching conversations");
     }
-});
+);
 
 export const conversationsSlice = createSlice({
     name: "conversations",
     initialState: {},
     reducers: {
-        setConversations: (state, action) => {
-            
-        },
+        setConversations: (state, action) => {},
         setConversation: (state, action) => {
             state[action.payload.id] = action.payload;
         },
@@ -136,28 +151,6 @@ export const conversationsSlice = createSlice({
         builder.addCase(fetchConversations.fulfilled, (state, action) => {
             console.log("fetchConversations.fulfilled");
             console.log(action.payload);
-
-
-            const conversations = action.payload;
-            Object.keys(conversations).forEach((id) => {
-                const groupedMessages = {};
-                const messages = conversations[id].messagesForUser;
-                messages.forEach(({ message, read }) => {
-                    const groupKey = message.createdAt.substring(0, 10);
-
-                    // if (groupedMessages[groupKey] === undefined) groupedMessages[groupKey] = [];
-
-                    // groupedMessages[groupKey].push({ ...message, read });
-
-                    if (groupedMessages[groupKey] === undefined) groupedMessages[groupKey] = {};
-                    groupedMessages[groupKey][message.id.toString()] = { ...message, read };
-
-                    if (read === false) ++conversations[id].unreadCounter;
-                });
-                delete conversations[id].messagesForUser;
-                conversations[id].messages = groupedMessages;
-            });
-            console.log("After grouping conversations : ", conversations);
             state = action.payload;
             return state;
         });
@@ -167,6 +160,22 @@ export const conversationsSlice = createSlice({
             console.log(action.payload);
             // Error in payloadCreator callback
             console.log(action.error);
+        });
+
+        //* For addConversation thunk
+        builder.addCase(addConversation.pending, (state, action) => {
+            console.log("fetchConversations.pending");
+        });
+        builder.addCase(addConversation.fulfilled, (state, action) => {
+            console.log("fetchConversations.fulfilled");
+            console.log(action.payload);
+            state = { ...state, ...action.payload };
+            return state;
+        });
+        builder.addCase(addConversation.rejected, (state, action) => {
+            console.log("fetchConversations.rejected");
+            // Rejected with thunkAPI.rejectWithValue
+            console.log(action.payload);
         });
     },
 });

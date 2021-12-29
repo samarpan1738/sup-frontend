@@ -79,20 +79,20 @@ function ContactInfoPanel() {
                         </StyledProfileSection>
                         {/* <StyledProfileSeperator /> */}
                         <StyledProfileActionContainer>
-                            <StyledProfileAction>
+                            {/* <StyledProfileAction>
                                 <StyledBlockIcon />
                                 <p>{currentChat.user.blocked ? "Unblock" : "Block"}</p>
-                            </StyledProfileAction>
+                            </StyledProfileAction> */}
 
                             <StyledProfileAction>
                                 <StyledDeleteIcon />
                                 <p>Delete chat</p>
                             </StyledProfileAction>
 
-                            <StyledProfileAction>
+                            {/* <StyledProfileAction>
                                 <StyledReportIcon />
                                 <p>Report contact</p>
-                            </StyledProfileAction>
+                            </StyledProfileAction> */}
                         </StyledProfileActionContainer>
                     </StyledProfile>
                 </StyledSection>

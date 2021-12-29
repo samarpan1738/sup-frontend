@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Avatar, useToast } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { StyledDetailsContainer } from "./styles";
 import styled from "styled-components";
 import { useHistory } from "react-router";
+import { addConversation } from "../../store/slices/conversations/conversationsSlice";
 const SriStyledDetailsContainer = styled(StyledDetailsContainer)`
     display: flex;
     justify-content: space-between;
@@ -19,7 +20,7 @@ const AddButton = styled.button`
     font-size: 14px;
     border: 1px solid var(--color);
     ${(props) => props.added && props.isHovered && "border:none;"}
-    
+
     transition: all 100ms ease-in;
     &:hover {
         ${(props) => !props.added && "box-shadow: -4px 4px var(--color);"}
@@ -45,59 +46,21 @@ const urlPrefix =
         : process.env.REACT_APP_BACKEND_PROD_URL;
 function SearchResultItem({ user, added }) {
     const history = useHistory();
+    const dispatch = useDispatch();
     const userDetails = useSelector((state) => state.userDetails);
     const toast = useToast();
     console.log(`userId : ${user.id} , added : ${added}`);
-    const [isHovered,setHovered]=useState(false);
-    const handleMouseOver=(e)=>{
-        console.log(`handleMouseOver called ${e.currentTarget}`)
+    const [isHovered, setHovered] = useState(false);
+    const handleMouseOver = (e) => {
+        console.log(`handleMouseOver called ${e.currentTarget}`);
         setHovered(true);
-    }
-    const handleMouseOut=(e)=>{
-        console.log(`handleMouseOut called ${e.currentTarget}`)
+    };
+    const handleMouseOut = (e) => {
+        console.log(`handleMouseOut called ${e.currentTarget}`);
         setHovered(false);
-    }
+    };
     const addUser = () => {
-        fetch(`${urlPrefix}/api/conversations/`, {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json",
-            },
-            credentials:"include",
-            body: JSON.stringify({
-                users: [user.id],
-                type:"CONTACT"
-            }),
-        })
-            .then((res) => {
-                if (res.status === 401 || res.status === 403) {
-                    return history.push("/login");
-                }
-                return res.json();
-            })
-            .then((data) => {
-                console.log("data : ", data);
-                if (data.success) {
-                    toast({
-                        title: data.message,
-                        status: "success",
-                        duration: 5000,
-                        isClosable: true,
-                    });
-                } else {
-                    toast({
-                        title: data.message,
-                        position: "top-right",
-                        status: "info",
-                        variant: "left-accent",
-                        duration: 5000,
-                        isClosable: true,
-                    });
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        dispatch(addConversation({ userId: user.id, type: "CONTACT", history }));
     };
     return (
         <StyledListItem>
@@ -113,7 +76,15 @@ function SearchResultItem({ user, added }) {
                     </i>
                 </div>
                 <div>
-                    <AddButton onClick={addUser} isHovered={isHovered} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} added={added}>{added ? (isHovered ? "remove" : "added") : "add"}</AddButton>
+                    <AddButton
+                        onClick={addUser}
+                        isHovered={isHovered}
+                        onMouseOver={handleMouseOver}
+                        onMouseOut={handleMouseOut}
+                        added={added}
+                    >
+                        {added ? (isHovered ? "remove" : "added") : "add"}
+                    </AddButton>
                     {/* {added === -1 ? (
                     ) : (
                         <AddedButton onClick={addUser}>{added === -1 ? "added" : "add"}</AddedButton>

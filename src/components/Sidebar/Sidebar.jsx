@@ -94,7 +94,6 @@ function Sidebar() {
             <TopBar avatarUri={profile_pic_uri}>
                 <StyledIconContainer>
                     <button onClick={() => openModal("search")}>{iconMappings["search"]}</button>
-                    <button>{iconMappings["chat"]}</button>
                     <button onClick={toggleMenuState}>{iconMappings["menu"]}</button>
                     {menu === true && (
                         <StyledMenu ref={menuRef} onClick={toggleMenuState}>

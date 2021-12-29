@@ -115,7 +115,7 @@ const CurrentChat = React.memo(({ conversation }) => {
                     </p>
                 </div>
                 <StyledIconContainer>
-                    <button>{iconMappings["search"]}</button>
+                    {/* <button>{iconMappings["search"]}</button> */}
                     <button onClick={toggleMenuState}>{iconMappings["menu"]}</button>
                     {menu === true && (
                         <StyledMenu ref={menuRef}>

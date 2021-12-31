@@ -1,9 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {io} from "socket.io-client";
-const urlPrefix =
-    process.env.NODE_ENV === "development"
-        ? "http://localhost:2000"
-        : process.env.REACT_APP_BACKEND_PROD_URL;
+import { urlPrefix } from "../../../utils/config";
 console.log("socketSlice urlPrefix : ",urlPrefix)
 export const socket = io(urlPrefix);
 socket.on("connect", (data) => {

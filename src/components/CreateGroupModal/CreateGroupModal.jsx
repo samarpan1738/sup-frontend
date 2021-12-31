@@ -6,11 +6,8 @@ import { setModalOpen } from "../../store/slices/modal/modalSlice";
 import { StyledClosePanelIcon } from "../CurrentChat/styledComponents";
 import Modal from "../Modal/Modal";
 import { StyledModalBox, StyledSelect } from "./styles";
+import { urlPrefix } from "../../utils/config";
 
-const urlPrefix =
-    process.env.NODE_ENV === "development"
-        ? process.env.REACT_APP_BACKEND_TEST_URL
-        : process.env.REACT_APP_BACKEND_PROD_URL;
 function CreateGroupModal() {
     const dispatch = useDispatch();
     const conversations = useSelector((state) => state.conversations);

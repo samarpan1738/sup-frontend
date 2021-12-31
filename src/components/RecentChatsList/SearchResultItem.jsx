@@ -5,6 +5,8 @@ import { StyledDetailsContainer } from "./styles";
 import styled from "styled-components";
 import { useHistory } from "react-router";
 import { addConversation } from "../../store/slices/conversations/conversationsSlice";
+import { urlPrefix } from "../../utils/config";
+
 const SriStyledDetailsContainer = styled(StyledDetailsContainer)`
     display: flex;
     justify-content: space-between;
@@ -40,10 +42,7 @@ const StyledListItem = styled.div`
         background-color: var(--background4);
     }
 `;
-const urlPrefix =
-    process.env.NODE_ENV === "development"
-        ? process.env.REACT_APP_BACKEND_TEST_URL
-        : process.env.REACT_APP_BACKEND_PROD_URL;
+
 function SearchResultItem({ user, added }) {
     const history = useHistory();
     const dispatch = useDispatch();

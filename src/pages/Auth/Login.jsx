@@ -14,10 +14,7 @@ import {
     StyledH1,
     SignupCTA,
 } from "./styles";
-const urlPrefix =
-    process.env.NODE_ENV === "development"
-        ? process.env.REACT_APP_BACKEND_TEST_URL
-        : process.env.REACT_APP_BACKEND_PROD_URL;
+import { urlPrefix } from "../../utils/config";
 function Login() {
     console.log("Login urlPrefix : ",urlPrefix)
     const { isAuthenticated } = useSelector((state) => state.userDetails);

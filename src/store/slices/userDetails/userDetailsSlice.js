@@ -1,9 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-const urlPrefix =
-    process.env.NODE_ENV === "development"
-        ? process.env.REACT_APP_BACKEND_TEST_URL
-        : process.env.REACT_APP_BACKEND_PROD_URL;
+import { urlPrefix } from "../../../utils/config";
 
 export const persistUserDetails = createAsyncThunk(
     "userDetails/persistUserDetails",

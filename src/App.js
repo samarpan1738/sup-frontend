@@ -8,6 +8,7 @@ import Signup from "./pages/Auth/Signup";
 import Loader from "./components/Loader/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserDetails } from "./store/slices/userDetails/userDetailsSlice";
+import { urlPrefix } from "./utils/config";
 
 const StyledApp = styled.div`
     background-color: black;
@@ -18,10 +19,6 @@ const StyledApp = styled.div`
     height: 100%;
     width: 100%;
 `;
-const urlPrefix =
-    process.env.NODE_ENV === "development"
-        ? process.env.REACT_APP_BACKEND_TEST_URL
-        : process.env.REACT_APP_BACKEND_PROD_URL;
 
 function App() {
     const { isAuthenticated, tokenExpired } = useSelector((state) => state.userDetails);
@@ -77,41 +74,33 @@ function App() {
     }
     const isLoading = isAuthenticated === false && tokenExpired === false;
     return (
-        
-            <ChakraProvider>
-                <BrowserRouter>
-                    <Switch>
-                        <Route exact path="/">
-                            {/* Wait if isAuthenticated === false and tokenExpired === false */}
-                            {isLoading ? (
-                                <Loader />
-                            ) : isAuthenticated === true ? (
-                                <Redirect to="/dashboard" />
-                            ) : (
-                                <Redirect to="/login" />
-                            )}
-                        </Route>
-                        <Route exact path="/login">
-                            {isLoading ? (
-                                <Loader />
-                            ) : isAuthenticated === true ? (
-                                <Redirect to="/dashboard" />
-                            ) : (
-                                <Login />
-                            )}
-                        </Route>
-                        <Route exact path="/signup">
-                            {isAuthenticated ? <Redirect to="/dashboard" /> : <Signup />}
-                        </Route>
-                        <Route exact path="/dashboard">
-                            <StyledApp>
-                                <Dashboard />
-                            </StyledApp>
-                        </Route>
-                    </Switch>
-                </BrowserRouter>
-            </ChakraProvider>
-        
+        <ChakraProvider>
+            <BrowserRouter>
+                <Switch>
+                    <Route exact path="/">
+                        {/* Wait if isAuthenticated === false and tokenExpired === false */}
+                        {isLoading ? (
+                            <Loader />
+                        ) : isAuthenticated === true ? (
+                            <Redirect to="/dashboard" />
+                        ) : (
+                            <Redirect to="/login" />
+                        )}
+                    </Route>
+                    <Route exact path="/login">
+                        {isLoading ? <Loader /> : isAuthenticated === true ? <Redirect to="/dashboard" /> : <Login />}
+                    </Route>
+                    <Route exact path="/signup">
+                        {isAuthenticated ? <Redirect to="/dashboard" /> : <Signup />}
+                    </Route>
+                    <Route exact path="/dashboard">
+                        <StyledApp>
+                            <Dashboard />
+                        </StyledApp>
+                    </Route>
+                </Switch>
+            </BrowserRouter>
+        </ChakraProvider>
     );
 }
 

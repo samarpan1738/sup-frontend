@@ -3,11 +3,7 @@ import classNames from "classnames";
 import { persistUserDetails } from "../../store/slices/userDetails/userDetailsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "react-query";
-
-const urlPrefix =
-    process.env.NODE_ENV === "development"
-        ? process.env.REACT_APP_BACKEND_TEST_URL
-        : process.env.REACT_APP_BACKEND_PROD_URL;
+import { urlPrefix } from "../../utils/config";
 
 function ChangeProfileInfo({ selectedMenuItem }) {
     console.log("Rendering ChangeProfileInfo");

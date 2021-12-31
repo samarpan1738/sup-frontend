@@ -14,7 +14,7 @@ import { deleteConversationMessages, markMessagesRead } from "../../store/slices
 import MessageBox from "../MessageBox/MessageBox";
 import MessageList from "../MessageList/MessageList";
 import GifPanel from "../GifPanel/GifPanel";
-
+import { urlPrefix } from "../../utils/config";
 const styles = {
     "--flex-grow": "2",
     "--justify-content": "space-between",
@@ -45,10 +45,7 @@ export const getTimeStamp = (lastActive) => {
             })
         );
 };
-const urlPrefix =
-    process.env.NODE_ENV === "development"
-        ? process.env.REACT_APP_BACKEND_TEST_URL
-        : process.env.REACT_APP_BACKEND_PROD_URL;
+
 const CurrentChat = React.memo(({ conversation }) => {
     console.log("Rendering current chat");
     const menuRef = useRef(null);

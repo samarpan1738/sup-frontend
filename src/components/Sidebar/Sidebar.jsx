@@ -10,6 +10,8 @@ import { setUserDetails } from "../../store/slices/userDetails/userDetailsSlice"
 import { setModalOpen } from "../../store/slices/modal/modalSlice";
 import { useHistory } from "react-router";
 import { setDashboard } from "../../store/slices/dashboard/dashboardSlice";
+import { urlPrefix } from "../../utils/config";
+
 const styles = {
     "--flex-grow": "1.1",
     "--max-width": "400px",
@@ -23,10 +25,7 @@ const DropdownMenuItem = styled.div`
         border-bottom: 0.8px solid var(--background4);
     }
 `;
-const urlPrefix =
-    process.env.NODE_ENV === "development"
-        ? process.env.REACT_APP_BACKEND_TEST_URL
-        : process.env.REACT_APP_BACKEND_PROD_URL;
+
 function Sidebar() {
     const { isAuthenticated, userId, profile_pic_uri } = useSelector((state) => state.userDetails);
     const history = useHistory();

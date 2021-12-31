@@ -14,7 +14,6 @@ import GroupInfoPanel from "../../components/CurrentGroup/GroupInfoPanel";
 import { Redirect } from "react-router";
 import Loader from "../../components/Loader/Loader";
 import Settings from "../../components/Settings/Settings";
-
 const StyledDashboard = styled.div`
     background-color: white;
     color: white;
@@ -22,10 +21,7 @@ const StyledDashboard = styled.div`
     width: 100%;
     display: flex;
 `;
-const urlPrefix =
-    process.env.NODE_ENV === "development"
-        ? process.env.REACT_APP_BACKEND_TEST_URL
-        : process.env.REACT_APP_BACKEND_PROD_URL;
+
 function Dashboard() {
     const { conversationId } = useSelector((state) => state.currentChat);
     const conversations = useSelector((state) => state.conversations);

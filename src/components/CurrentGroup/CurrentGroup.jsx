@@ -9,7 +9,7 @@ import { useToast } from "@chakra-ui/react";
 import MessageBox from "../MessageBox/MessageBox";
 import MessageList from "../MessageList/MessageList";
 import GifPanel from "../GifPanel/GifPanel";
-
+import { urlPrefix } from "../../utils/config";
 const styles = {
     "--flex-grow": "2",
     "--justify-content": "space-between",
@@ -40,10 +40,7 @@ export const getTimeStamp = (lastActive) => {
             })
         );
 };
-const urlPrefix =
-    process.env.NODE_ENV === "development"
-        ? process.env.REACT_APP_BACKEND_TEST_URL
-        : process.env.REACT_APP_BACKEND_PROD_URL;
+
 function CurrentGroup({ conversation }) {
     const menuRef = useRef(null);
     const [menu, setMenu] = useState(false);

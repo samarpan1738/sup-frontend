@@ -13,9 +13,10 @@ import CurrentGroup from "../../components/CurrentGroup/CurrentGroup";
 import GroupInfoPanel from "../../components/CurrentGroup/GroupInfoPanel";
 import { Redirect } from "react-router";
 import Loader from "../../components/Loader/Loader";
+import Settings from "../../components/Settings/Settings";
 
 const StyledDashboard = styled.div`
-    background-color: var(--background2);
+    background-color: white;
     color: white;
     height: 100%;
     width: 100%;
@@ -30,18 +31,19 @@ function Dashboard() {
     const conversations = useSelector((state) => state.conversations);
     const { search: isSearchModalOpen, createGroup: isGroupModalOpen } = useSelector((state) => state.modal);
     const { isAuthenticated, tokenExpired } = useSelector((state) => state.userDetails);
+    const { isSettingsOpen } = useSelector((state) => state.dashboard);
+    const currentChat  = useSelector((state) => state.currentChat);
     console.log("Dashboard isAuthenticated : ", isAuthenticated);
     return isAuthenticated ? (
         <StyledDashboard>
             {isSearchModalOpen && <SearchUsersModal />}
             {isGroupModalOpen && <CreateGroupModal />}
             <Sidebar />
-
-            {conversationId && conversations[conversationId] ? (
+            {isSettingsOpen ? <Settings/> : conversationId && conversations[conversationId] ? (
                 conversations[conversationId].type === "CONTACT" ? (
                     <>
                         <CurrentChat conversation={conversations[conversationId]} />
-                        <ContactInfoPanel />
+                        {currentChat.isProfileOpen && <ContactInfoPanel currentChat={currentChat}/>}
                     </>
                 ) : (
                     <>
@@ -52,6 +54,7 @@ function Dashboard() {
             ) : (
                 <FeatureList />
             )}
+            {/* <Settings/> */}
         </StyledDashboard>
     ) : 
     !tokenExpired ? (

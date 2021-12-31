@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 export const dashboardSlice = createSlice({
     name: "dashboard",
     initialState: {
-        loading:true
+        loading:true,
+        isSettingsOpen: false,
     },
     reducers: {
         setDashboard: (state, action) => {

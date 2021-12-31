@@ -11,15 +11,20 @@ import {
     StyledProfileAction,
     StyledDeleteIcon,
     StyledProfileActionContainer,
+    StyledExitIcon,
 } from "./styles";
 import { StyledDetailsContainer, StyledListItem } from "../RecentChatsList/styles";
 function GroupInfoPanel() {
     const dispatch = useDispatch();
     const currentChat = useSelector((store) => store.currentChat);
     const conversations = useSelector((store) => store.conversations);
+    const { userId, name, status, profile_pic_uri } = useSelector((store) => store.userDetails);
     const currentConversation = conversations[currentChat.conversationId];
     const usersCount = Object.keys(currentConversation.users).length;
-    const createdBy = currentConversation.users[currentConversation.createdBy.id];
+    const createdByName =
+        currentConversation.createdBy.id == userId
+            ? "you"
+            : currentConversation.users[currentConversation.createdBy.id].name;
     const closeProfile = () => {
         dispatch(setIsProfileOpen(false));
     };
@@ -31,13 +36,14 @@ function GroupInfoPanel() {
     return (
         <>
             {currentChat.isProfileOpen && (
-                <StyledSection
+                <div
                     style={{
-                        "--flex-grow": "1.2",
-                        "--max-width": "500px",
-                        "--border-left": "0.8px solid var(--background4)",
-                        backgroundColor:"rgb(230, 230, 230)"
+                        flexGrow: "1.2",
+                        maxWidth: "380px",
+                        borderLeft: "0.8px solid var(--background4)",
+                        // backgroundColor: "rgb(240, 240, 240)",
                     }}
+                    className="bg-gray-100"
                 >
                     <TopBar hideAvatar>
                         <div
@@ -57,7 +63,7 @@ function GroupInfoPanel() {
                     </TopBar>
 
                     <StyledProfile>
-                        <StyledProfileHeader className="bg-gray-100">
+                        <StyledProfileHeader className="bg-white">
                             <Avatar
                                 src={currentConversation.conversationIconUrl}
                                 width="180px"
@@ -72,7 +78,7 @@ function GroupInfoPanel() {
                             </div>
                         </StyledProfileHeader>
                         <div className="h-3"></div>
-                        <StyledProfileSection className="bg-gray-100">
+                        <StyledProfileSection className="bg-white">
                             <header
                                 style={{
                                     color: "#41916c",
@@ -84,7 +90,7 @@ function GroupInfoPanel() {
                             <p>{currentConversation.description}</p>
                             <div className="h-2"></div>
                             <p className="text-sm text-gray-500">
-                                Group created by {createdBy.name} on {createdAtDate} at {createdAtTime}
+                                Group created by {createdByName} on {createdAtDate} at {createdAtTime}
                             </p>
                         </StyledProfileSection>
                         <div className="h-3"></div>
@@ -92,7 +98,7 @@ function GroupInfoPanel() {
                             style={{
                                 padding: "16px 24px",
                             }}
-                            className="bg-gray-100 flex flex-col"
+                            className="bg-white flex flex-col"
                         >
                             <header
                                 style={{
@@ -104,38 +110,48 @@ function GroupInfoPanel() {
                             </header>
                             <div className="h-2"></div>
                             <div className="space-y-1.5">
-                                {Object.keys(currentConversation.users).map((id) => {
-                                    const user=currentConversation.users[id];
+                                <div className="flex items-center">
+                                    <Avatar src={profile_pic_uri} width="38px" height="38px" />
+                                    <div className="px-3">
+                                        <p className="text-base font-semibold">You</p>
+                                        <p className="text-sm text-gray-700">{status}</p>
+                                    </div>
+                                </div>
+                                <div className="h-1"></div>
+                                {Object.keys(currentConversation.users).map((id, idx) => {
+                                    const user = currentConversation.users[id];
                                     return (
-                                        <StyledListItem noHoverEffects noPadding cursor="auto" className="">
-                                            <Avatar src={user.profile_pic_uri} width="38px" height="38px" />
-                                            <StyledDetailsContainer noBottomBorder>
-                                                <p>
-                                                    <span>{user.name}</span>
-                                                </p>
-
-                                                <p className="conversation_last_message">{user.status}</p>
-                                            </StyledDetailsContainer>
-                                        </StyledListItem>
+                                        <>
+                                            <div className="flex items-center">
+                                                <Avatar src={user.profile_pic_uri} width="38px" height="38px" />
+                                                <div className="px-3">
+                                                    <p className="text-base font-semibold">{user.name}</p>
+                                                    <p className="text-sm text-gray-700">{user.status}</p>
+                                                </div>
+                                            </div>
+                                            {idx !== Object.keys(currentConversation.users).length - 1 && (
+                                                <div className="h-1"></div>
+                                            )}
+                                        </>
                                     );
                                 })}
                             </div>
                         </div>
                         <div className="h-3"></div>
-                        <StyledProfileActionContainer className="bg-gray-100 py-2 px-2">
+                        <StyledProfileActionContainer className="bg-white py-2 px-2">
                             <StyledProfileAction>
                                 <StyledDeleteIcon />
                                 <p>Delete chat</p>
                             </StyledProfileAction>
                             <div className="h-5"></div>
                             <StyledProfileAction>
-                                <StyledDeleteIcon />
+                                <StyledExitIcon />
                                 <p>Exit group</p>
                             </StyledProfileAction>
                         </StyledProfileActionContainer>
                         <div className="h-12"></div>
                     </StyledProfile>
-                </StyledSection>
+                </div>
             )}
         </>
     );

@@ -22,6 +22,7 @@ const urlPrefix =
     process.env.NODE_ENV === "development"
         ? process.env.REACT_APP_BACKEND_TEST_URL
         : process.env.REACT_APP_BACKEND_PROD_URL;
+
 function App() {
     const { isAuthenticated, tokenExpired } = useSelector((state) => state.userDetails);
     const dispatch = useDispatch();
@@ -57,51 +58,60 @@ function App() {
                             userId: data.data.id,
                             profile_pic_uri: data.data.profile_pic_uri,
                             status: data.data.status,
+                            username: data.data.username,
                         })
                     );
                 } else {
                     setUserDetails({
                         isAuthenticated: false,
                         tokenExpired: true,
-                    })
+                    });
                 }
             })
             .catch((err) => {
                 setUserDetails({
                     isAuthenticated: false,
                     tokenExpired: true,
-                })
+                });
             });
     }
     const isLoading = isAuthenticated === false && tokenExpired === false;
     return (
-        <ChakraProvider>
-            <BrowserRouter>
-                <Switch>
-                    <Route exact path="/">
-                        {/* Wait if isAuthenticated === false and tokenExpired === false */}
-                        {isLoading ? (
-                            <Loader />
-                        ) : isAuthenticated === true ? (
-                            <Redirect to="/dashboard" />
-                        ) : (
-                            <Redirect to="/login" />
-                        )}
-                    </Route>
-                    <Route exact path="/login">
-                        {isLoading ? <Loader /> : isAuthenticated === true ? <Redirect to="/dashboard" /> : <Login />}
-                    </Route>
-                    <Route exact path="/signup">
-                        {isAuthenticated ? <Redirect to="/dashboard" /> : <Signup />}
-                    </Route>
-                    <Route exact path="/dashboard">
-                        <StyledApp>
-                            <Dashboard />
-                        </StyledApp>
-                    </Route>
-                </Switch>
-            </BrowserRouter>
-        </ChakraProvider>
+        
+            <ChakraProvider>
+                <BrowserRouter>
+                    <Switch>
+                        <Route exact path="/">
+                            {/* Wait if isAuthenticated === false and tokenExpired === false */}
+                            {isLoading ? (
+                                <Loader />
+                            ) : isAuthenticated === true ? (
+                                <Redirect to="/dashboard" />
+                            ) : (
+                                <Redirect to="/login" />
+                            )}
+                        </Route>
+                        <Route exact path="/login">
+                            {isLoading ? (
+                                <Loader />
+                            ) : isAuthenticated === true ? (
+                                <Redirect to="/dashboard" />
+                            ) : (
+                                <Login />
+                            )}
+                        </Route>
+                        <Route exact path="/signup">
+                            {isAuthenticated ? <Redirect to="/dashboard" /> : <Signup />}
+                        </Route>
+                        <Route exact path="/dashboard">
+                            <StyledApp>
+                                <Dashboard />
+                            </StyledApp>
+                        </Route>
+                    </Switch>
+                </BrowserRouter>
+            </ChakraProvider>
+        
     );
 }
 

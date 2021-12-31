@@ -44,6 +44,7 @@ export const StyledListItem = styled.div`
     `}
     display: flex;
     cursor: ${({ cursor }) => (cursor ? cursor : "pointer")};
+    ${(props) => (props.selectedChat == false ? "" : "background-color: var(--background4);")}
     &:hover {
         ${(props) => (props.noHoverEffects ? "" : "background-color: var(--background4);")}
     }

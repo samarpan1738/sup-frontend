@@ -13,7 +13,7 @@ export const StyledTopBar = styled.div`
     border-top: ${(props) => props.bt};
     padding: 8px 16px;
     align-items: center;
-    justify-content: space-between;
+    justify-content: ${(props) => props.jc};
 `;
 export const StyledIconContainer = styled.div`
     display: flex;
@@ -65,9 +65,9 @@ export const iconMappings = {
     search: <StyledSearchIcon />,
     close: <StyledCloseIcon />,
 };
-function TopBar({ children, hideAvatar = false, bgColor = "--background3", bt = "0", avatarUri ,name}) {
+function TopBar({ children, hideAvatar = false, bgColor = "--background3", bt = "0", avatarUri ,name,jc="space-between"}) {
     return (
-        <StyledTopBar bgColor={bgColor} bt={bt}>
+        <StyledTopBar bgColor={bgColor} bt={bt} jc={jc}>
             {!hideAvatar && (
                 <Avatar
                     src={avatarUri}

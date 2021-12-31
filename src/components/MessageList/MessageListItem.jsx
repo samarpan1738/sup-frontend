@@ -12,13 +12,12 @@ const MessageListItem = React.memo(
     ({ conversationType, message, userId, users }) => {
         console.log(`Rendering message list item ${message.id}`);
         const messageType = message.sender_id === userId ? "sent" : "received";
-        // TODO: Show sender name on top of message for Group chat
         return (
             <StyledMessagesListItem type={messageType}>
                 {message.type === "TEXT" ? (
                     <StyledMessageBox>
                         {conversationType === "GROUP" && (
-                            <div className="text-pink-500 font-semibold pl-1 pb-1">{users[message.sender_id].name}</div>
+                            <div className="text-pink-500 font-semibold pl-1 pb-1">{message.sender_id == userId ? "You" : users[message.sender_id].name}</div>
                         )}
                         <div className="text-message">
                             <span className="StyledMessageBox_text">{message.text}</span>

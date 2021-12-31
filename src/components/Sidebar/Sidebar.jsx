@@ -9,6 +9,7 @@ import styled from "styled-components";
 import { setUserDetails } from "../../store/slices/userDetails/userDetailsSlice";
 import { setModalOpen } from "../../store/slices/modal/modalSlice";
 import { useHistory } from "react-router";
+import { setDashboard } from "../../store/slices/dashboard/dashboardSlice";
 const styles = {
     "--flex-grow": "1.1",
     "--max-width": "400px",
@@ -98,6 +99,7 @@ function Sidebar() {
                     {menu === true && (
                         <StyledMenu ref={menuRef} onClick={toggleMenuState}>
                             <DropdownMenuItem onClick={() => openModal("createGroup")}>Create Group</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => dispatch(setDashboard({isSettingsOpen:true}))}>Settings</DropdownMenuItem>
                             <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
                         </StyledMenu>
                     )}

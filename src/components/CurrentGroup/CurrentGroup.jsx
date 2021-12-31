@@ -64,7 +64,7 @@ function CurrentGroup({ conversation }) {
         toggleMenuState();
         fetch(`${urlPrefix}/api/conversations/${currentChat.conversationId}/messages`, {
             method: "delete",
-            credentials:"include",
+            credentials: "include",
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },
@@ -106,7 +106,7 @@ function CurrentGroup({ conversation }) {
         if (unreadMsgIds.length > 0) {
             fetch(`${urlPrefix}/api/conversations/${currentChat.conversationId}/messages/markRead`, {
                 method: "POST",
-                credentials:"include",
+                credentials: "include",
                 body: JSON.stringify({
                     messageIds: unreadMsgIds.map(({ id }) => id),
                 }),
@@ -136,9 +136,9 @@ function CurrentGroup({ conversation }) {
                     <p>{conversation.title}</p>
                     <p style={{ fontWeight: "400", fontSize: "12px" }}>
                         {Object.keys(conversation.users)
-                            .map((id) => (id == userId ? "You" : conversation.users[id].name.split(" ")[0]))
+                            .map((id) => conversation.users[id].name.split(" ")[0])
                             .sort()
-                            .join(", ")}
+                            .join(", ") + ", You"}
                     </p>
                 </div>
                 <StyledIconContainer>

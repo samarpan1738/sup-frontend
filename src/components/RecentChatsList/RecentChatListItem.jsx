@@ -47,18 +47,16 @@ const RecentChatListItem = React.memo(({ conversation }) => {
     if (type === "CONTACT") {
         // Only 2 users
         contact = users[Object.keys(users)[0]];
-        console.log(`${typeof Object.keys(users)[0]} == ${typeof userId}`)
+        console.log(`${typeof Object.keys(users)[0]} == ${typeof userId}`);
         if (Object.keys(users)[0] == userId) contact = users[Object.keys(users)[1]];
-        console.log("contact : ",contact);
+        console.log("contact : ", contact);
         conversationTitle = contact.name;
         conversationAvatarUri = contact.profile_pic_uri;
     }
 
     const setCurrentConversation = () => {
-        // Fetch user details from API
-        console.log("currentChat before flushsync: ", currentChat);
-        // if (currentChat.conversationId !== id) {
-        flushSync(() => {
+        console.log(`currentChat.conversationId !== conversation.id : ${currentChat.conversationId} !== ${conversation.id}`);
+        if (currentChat.conversationId !== conversation.id) {
             dispatch(
                 setCurrentChat({
                     isProfileOpen: false,
@@ -66,16 +64,15 @@ const RecentChatListItem = React.memo(({ conversation }) => {
                     user: contact,
                 })
             );
-        });
-        console.log("currentChat after flushsync: ", currentChat);
-        dispatch(resetUnreadCounter(id));
-        // }
+            console.log("currentChat after flushsync: ", currentChat);
+            dispatch(resetUnreadCounter(id));
+        }
     };
     /**
      font-weight : ${props=>props.unread?"700":"normal"};
      */
     return (
-        <StyledListItem onClick={setCurrentConversation}>
+        <StyledListItem onClick={setCurrentConversation} selectedChat={currentChat.conversationId == conversation.id}>
             <Avatar src={conversationAvatarUri} width="38px" height="38px" />
             <StyledDetailsContainer>
                 <p>

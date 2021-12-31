@@ -4,7 +4,7 @@ import styled from "styled-components";
 import RecentChatListItem from "./RecentChatListItem";
 const StyledList = styled.ul`
     // background-color: var(--background2);
-    background-color: #f3f4f6;
+    // background-color: #f3f4f6;
     height: 100%;
     width: 100%;
     color: black;

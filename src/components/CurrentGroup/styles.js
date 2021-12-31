@@ -3,6 +3,7 @@ import { ReactComponent as SendIcon } from "../../assets/images/send.svg";
 import { ReactComponent as AttachmentIcon } from "../../assets/images/attach-file.svg";
 import { ReactComponent as BlockIcon } from "../../assets/images/block.svg";
 import { ReactComponent as DeleteIcon } from "../../assets/images/delete.svg";
+import { ReactComponent as ExitIcon } from "../../assets/images/exit.svg";
 import { ReactComponent as ReportIcon } from "../../assets/images/thumbs-down.svg";
 import TopBar from "../../globals/styledComponents/TopBar";
 import { ReactComponent as EmojiIcon } from "../../assets/images/emoji.svg";
@@ -28,7 +29,8 @@ export const StyledClosePanelIcon = styled(ClosePanelIcon)`
     cursor: pointer;
 `;
 export const StyledMessageBox = styled.div`
-    background-color: var(--background4);
+    // background-color: #dbe1de;
+    background-color: #e6ebe8;
     width: max-content;
     min-width:100px;
     max-width: 47%;
@@ -190,6 +192,12 @@ export const StyledBlockIcon = styled(BlockIcon)`
     margin-right: 20px;
 `;
 export const StyledDeleteIcon = styled(DeleteIcon)`
+    fill: rgb(239, 105, 122);
+    width: 22px;
+    height: 22px;
+    margin-right: 20px;
+`;
+export const StyledExitIcon = styled(ExitIcon)`
     fill: rgb(239, 105, 122);
     width: 22px;
     height: 22px;

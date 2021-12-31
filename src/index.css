@@ -27,7 +27,7 @@ body,
     /* --background2: rgb(230, 230, 230); */
     --background2: #efefef;
     --background3: rgb(64, 145, 108);
-    --background4: #cdd4d0;
+    --background4: #e9ebea;
     --background5: rgb(82, 183, 136);
     --background6: rgb(116, 198, 157);
     --background7: rgb(149, 213, 178);
@@ -37,4 +37,5 @@ body,
     /* --background10: rgb(199 205 203); */
     --background10: rgb(221 221 221);
     --background11: rgb(87 167 130);
+    --bg-bottom-bar: rgb(237 237 237);
 }

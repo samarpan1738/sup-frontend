@@ -58,6 +58,7 @@ function Login() {
                             userId: data.data.userId,
                             profile_pic_uri: data.data.profile_pic_uri,
                             status: data.data.status,
+                            username: data.data.username,
                         })
                     );
                 } else {

@@ -12,8 +12,9 @@ const StyledSection = styled.div`
     justify-content:var(--justify-content);
     align-items:var(--ai);
     color:var(--color);
+    background-color:white;
 `;
-function Section({ children, style, icons }) {
+function Section({ children, style }) {
     return (
         <StyledSection style={style}>
             {children}

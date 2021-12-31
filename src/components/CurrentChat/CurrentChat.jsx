@@ -127,7 +127,7 @@ const CurrentChat = React.memo(({ conversation }) => {
 
             <MessageList conversationId={currentChat.conversationId} userId={userId} />
             {isGifPanelOpen && <GifPanel conversationId={currentChat.conversationId} userId={userId} />}
-            <BottomBar hideAvatar={true} bgColor={"--background10"}>
+            <BottomBar hideAvatar={true} bgColor={"--bg-bottom-bar"}>
                 <IconContainer>
                     <button onClick={toggleGifPanel}>
                         {isGifPanelOpen ? (

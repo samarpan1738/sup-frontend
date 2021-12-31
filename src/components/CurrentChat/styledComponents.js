@@ -138,7 +138,7 @@ export const IconContainer = styled.div`
     }
 `;
 export const StyledInput = styled.input`
-    background-color: var(--background2);
+    background-color: white;
     width: 100%;
     color: black;
     border-radius: 100px;
@@ -167,6 +167,7 @@ export const StyledProfile = styled.div`
     height: calc(100% - 55px);
     border-bottom: 1px solid var(--background3);
     color: black;
+    // background-color: white;
 `;
 export const StyledProfileSeperator = styled.div`
     height: 10px;
@@ -215,24 +216,24 @@ export const StyledReportIcon = styled(ReportIcon)`
     font-size: 18px;
 `;
 export const StyledProfileActionContainer = styled.div`
-    margin-top: 20px;
+    padding: 16px 24px;
 `;
 export const StyledProfileAction = styled.div`
     cursor: pointer;
     color: rgb(239, 105, 122);
     display: flex;
-    background-color: rgb(220, 220, 220);
+    background-color: rgb(239 239 239);
     padding: 10px 20px;
     border-radius: 10px;
     align-items: center;
-    margin: 0 10px;
+    // margin: 0 10px;
     margin-bottom: 16px;
     & > p {
         font-weight: 600;
     }
     &:hover {
-        background-color: rgb(210, 210, 210);
-        box-shadow: 0px 0px 2px rgb(200, 200, 200);
+        background-color: rgb(229 226 226);
+        box-shadow: 0px 0px 2px rgb(229 226 226);
     }
 `;
 export const DaySeperator = styled.div`

@@ -64,7 +64,7 @@ function ContactInfoPanel({ currentChat }) {
                     >
                         About and username
                     </header>
-                    <p className="current_chat_status">{currentChat.user.status}</p>
+                    <p className="border-b border-gray-300 mb-2 pb-2">{currentChat.user.status}</p>
                     <p className="current_chat_username">{currentChat.user.username}</p>
                 </StyledProfileSection>
                 <div className="h-3 bg-gray-100"></div>

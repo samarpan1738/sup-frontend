@@ -178,18 +178,6 @@ export const StyledProfileSection = styled.div`
     padding: 16px 24px;
     font-size: 16px;
     color: #313a37;
-    // & > header {
-    //     color: #41916c;
-    //     margin-bottom: 20px;
-    //     font-size: 14px;
-    // }
-    & > .current_chat_status {
-        border-bottom: 1px solid #b3c3bb;
-        padding-bottom: 8px;
-        margin-bottom: 8px;
-    }
-    & > .current_chat_username {
-    }
 `;
 export const StyledProfileHeader = styled(StyledProfileSection)`
     align-items: center;

@@ -265,7 +265,7 @@ export const StyledDateLabel = styled.p`
     left: 50%;
     // transform:translateY(10px);
     transform: translateX(-50%);
-    background-color: #e6e6e6;
+    background-color: var(--bg-bottom-bar);
 `;
 
 export const StyledMessageGroup = styled.div`

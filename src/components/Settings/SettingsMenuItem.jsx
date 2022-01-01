@@ -1,9 +1,9 @@
 import React from "react";
 import { ReactComponent as RightArrow } from "../../assets/images/right-arrow.svg";
-function SettingsMenuItem({ label, value, setSelectedMenuItem,editable }) {
+function SettingsMenuItem({ label, value, setSelectedMenuItem, editable }) {
     return (
-        <p
-            onClick={() => editable && setSelectedMenuItem({ label, value,editable })}
+        <div
+            onClick={() => editable && setSelectedMenuItem({ label, value, editable })}
             className="px-4 py-3 text-black w-full hover:bg-gray-100 cursor-pointer flex flex-row justify-between items-center"
         >
             <div>
@@ -13,7 +13,7 @@ function SettingsMenuItem({ label, value, setSelectedMenuItem,editable }) {
                 </div>
             </div>
             {editable && <RightArrow fill="grey" />}
-        </p>
+        </div>
     );
 }
 

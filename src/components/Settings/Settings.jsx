@@ -38,9 +38,9 @@ function Settings() {
                         <span className="font-semibold text-lg">Settings</span>
                     </TopBar>
                     <div className="w-full">
-                        <p className="px-4 py-3 text-base text-black w-full bg-gray-100 cursor-pointer flex justify-between items-center">
+                        <div className="px-4 py-3 text-base text-black w-full bg-gray-100 cursor-pointer flex justify-between items-center">
                             <div style={{ fontSize: "15px" }}>Your profile</div> <RightArrow fill="grey" />
-                        </p>
+                        </div>
                     </div>
                 </div>
                 <div

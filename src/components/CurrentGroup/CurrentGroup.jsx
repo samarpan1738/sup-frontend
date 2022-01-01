@@ -151,7 +151,7 @@ function CurrentGroup({ conversation }) {
 
             <MessageList conversationId={currentChat.conversationId} userId={userId} />
             {isGifPanelOpen && <GifPanel conversationId={currentChat.conversationId} userId={userId} />}
-            <BottomBar hideAvatar={true} bgColor={"--background10"} bt="1px solid var(--background4)">
+            <BottomBar hideAvatar={true} bgColor={"--bg-bottom-bar"} bt="1px solid var(--background4)">
                 <IconContainer>
                     <button onClick={toggleGifPanel}>
                         {isGifPanelOpen ? (

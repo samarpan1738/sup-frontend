@@ -36,7 +36,7 @@ function FeatureList() {
     return (
         <StyledSection style={styles}>
             <div className="flex flex-col">
-                <div className="text-xl flex items-center">Search <StyledSearchIcon/> for users</div>
+                <div className="text-xl flex items-center">Tap <StyledSearchIcon/> to search for friends</div>
                 {/* <div className="h-2"></div>
                 <div className="text-base text-gray-500">or</div>
                 <div className="h-2"></div>

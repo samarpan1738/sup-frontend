@@ -9,6 +9,7 @@ import Loader from "./components/Loader/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserDetails } from "./store/slices/userDetails/userDetailsSlice";
 import { urlPrefix } from "./utils/config";
+import axios from "axios";
 
 const StyledApp = styled.div`
     background-color: black;
@@ -26,50 +27,43 @@ function App() {
 
     if (isAuthenticated === false && tokenExpired == false) {
         console.log(`isAuthenticated : ${isAuthenticated} , tokenExpired : ${tokenExpired}`);
-        fetch(`${urlPrefix}/api/user/`, {
-            method: "GET",
-            credentials: "include",
-        })
+        axios
+            .get(`${urlPrefix}/api/user/`, {
+                withCredentials: true,
+            })
             .then((res) => {
-                if (res.status === 401 || res.status === 403) {
-                    console.log("401 or 403");
+                console.log("user data", res.data);
+                if (res.data && res.data.success === true) {
+                    console.log("Setting user details");
+                    dispatch(
+                        setUserDetails({
+                            isAuthenticated: true,
+                            tokenExpired: false,
+                            name: res.data.data.name,
+                            email: res.data.data.email,
+                            userId: res.data.data.id,
+                            profile_pic_uri: res.data.data.profile_pic_uri,
+                            status: res.data.data.status,
+                            username: res.data.data.username,
+                        })
+                    );
+                } else {
                     dispatch(
                         setUserDetails({
                             isAuthenticated: false,
                             tokenExpired: true,
                         })
                     );
-                    return;
-                }
-                return res.json();
-            })
-            .then((data) => {
-                console.log(data);
-                if (data !== undefined && data.success === true) {
-                    dispatch(
-                        setUserDetails({
-                            isAuthenticated: true,
-                            tokenExpired: false,
-                            name: data.data.name,
-                            email: data.data.email,
-                            userId: data.data.id,
-                            profile_pic_uri: data.data.profile_pic_uri,
-                            status: data.data.status,
-                            username: data.data.username,
-                        })
-                    );
-                } else {
-                    setUserDetails({
-                        isAuthenticated: false,
-                        tokenExpired: true,
-                    });
                 }
             })
             .catch((err) => {
-                setUserDetails({
-                    isAuthenticated: false,
-                    tokenExpired: true,
-                });
+                console.log("err", err);
+                dispatch(
+                    setUserDetails({
+                        isAuthenticated: false,
+                        tokenExpired: true,
+                    })
+                );
             });
     }
     const isLoading = isAuthenticated === false && tokenExpired === false;

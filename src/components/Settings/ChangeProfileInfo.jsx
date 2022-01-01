@@ -46,7 +46,7 @@ function ChangeProfileInfo({ selectedMenuItem }) {
             <div className="h-6"></div>
             <button
                 className={classNames("bg-green-500 rounded-full px-4 py-1 self-end w-max font-bold", {
-                    "cursor-not-allowed opacity-60": !editable,
+                    "cursor-not-allowed opacity-60": !editable || text === value,
                 })}
                 disabled={!editable}
                 onClick={() => dispatch(persistUserDetails({ username, status: text }))}

@@ -4,7 +4,8 @@ const modalSlice = createSlice({
     name: "modal",
     initialState: {
         search:false,
-        createGroup:false
+        createGroup:false,
+        addGroupParticipants:false
     },
     reducers: {
         setModalOpen: (state, action) => {

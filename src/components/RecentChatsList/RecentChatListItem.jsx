@@ -45,10 +45,7 @@ const RecentChatListItem = React.memo(({ conversation }) => {
         conversationAvatarUri = conversation.conversationIconUrl;
     let contact = null;
     if (type === "CONTACT") {
-        // Only 2 users
         contact = users[Object.keys(users)[0]];
-        console.log(`${typeof Object.keys(users)[0]} == ${typeof userId}`);
-        if (Object.keys(users)[0] == userId) contact = users[Object.keys(users)[1]];
         console.log("contact : ", contact);
         conversationTitle = contact.name;
         conversationAvatarUri = contact.profile_pic_uri;

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUsersByQuery, setQueryText } from "../../store/slices/searchUsers/searchUsersSlice";
 import Modal from "../Modal/Modal";
@@ -13,6 +13,8 @@ import {
     ModalDropdown,
     ModalDropdownContainer,
 } from "./styles";
+
+import {debounce} from "../../utils"
 
 function SearchUsersModal() {
     const dispatch = useDispatch();
@@ -37,9 +39,9 @@ function SearchUsersModal() {
         console.log(e.currentTarget.value);
         dispatch(setQueryText(e.currentTarget.value.trim()));
     };
-
+    const debouncedFunction=useRef(debounce((inp)=>dispatch(fetchUsersByQuery(inp))))
     useEffect(() => {
-        if (queryText && queryText.trim().length != 0) dispatch(fetchUsersByQuery(queryText));
+        if (queryText && queryText.trim().length != 0) debouncedFunction.current(queryText);
     }, [queryText]);
     return (
         <Modal target="search">

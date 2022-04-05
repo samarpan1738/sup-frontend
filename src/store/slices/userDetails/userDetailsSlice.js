@@ -1,33 +1,22 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import UserService from "../../../services/UserService";
 
-import { urlPrefix } from "../../../utils/config";
-
-export const persistUserDetails = createAsyncThunk(
-    "userDetails/persistUserDetails",
-    async ({ username, status }, thunkApi) => {
-        try {
-            const res = await fetch(`${urlPrefix}/api/user/${username}`, {
-                method: "PATCH",
-                headers:{
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    status,
-                }),
-            });
-            const data = await res.json();
-            console.log("data : ", data);
-            if (data.success) {
-                return data.data;
-            } else {
-                thunkApi.rejectWithValue("Unable to update user details");
-            }
-        } catch (error) {
-            thunkApi.rejectWithValue("Error updating user details");
+export const persistUserDetails = createAsyncThunk("userDetails/persistUserDetails", async ({ username, status }, thunkApi) => {
+    try {
+        const res = await UserService.updateUserStatus(username, {
+            status,
+        });
+        const data = await res.json();
+        console.log("data : ", data);
+        if (data.success) {
+            return data.data;
+        } else {
+            thunkApi.rejectWithValue("Unable to update user details");
         }
+    } catch (error) {
+        thunkApi.rejectWithValue("Error updating user details");
     }
-);
+});
 export const userDetailsSlice = createSlice({
     name: "userDetails",
     initialState: {

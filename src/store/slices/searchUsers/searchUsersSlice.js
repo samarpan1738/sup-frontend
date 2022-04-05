@@ -1,12 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { urlPrefix } from "../../../utils/config";
+import UserService from "../../../services/UserService";
+
 export const fetchUsersByQuery = createAsyncThunk("searchUsers/fetchUsersByQuery", async (queryText, thunkAPI) => {
     try {
         // const accessToken = thunkAPI.getState().userDetails.accessToken;
         console.log(queryText);
-        const response = await fetch(`${urlPrefix}/api/user/search?query=${queryText}`,{
-            credentials:"include",
-        });
+        const response = await UserService.searchUsers(queryText);
         const data = response.json();
         return data;
     } catch (error) {
@@ -27,7 +26,7 @@ const searchUsersSlice = createSlice({
             if (action.payload.length === 0) {
                 state.searchResults = [];
             }
-        }
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchUsersByQuery.pending, (state, action) => {

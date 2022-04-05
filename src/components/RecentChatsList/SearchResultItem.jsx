@@ -5,7 +5,6 @@ import { StyledDetailsContainer } from "./styles";
 import styled from "styled-components";
 import { useHistory } from "react-router";
 import { addConversation } from "../../store/slices/conversations/conversationsSlice";
-import { urlPrefix } from "../../utils/config";
 
 const SriStyledDetailsContainer = styled(StyledDetailsContainer)`
     display: flex;

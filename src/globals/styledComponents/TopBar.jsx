@@ -73,8 +73,6 @@ function TopBar({ children, hideAvatar = false, bgColor = "--background3", bt = 
                     src={avatarUri}
                     width="38px"
                     height="38px"
-                    borderWidth="2px"
-                    borderColor="rgb(45, 106, 79)"
                 />
             )}
             {children}

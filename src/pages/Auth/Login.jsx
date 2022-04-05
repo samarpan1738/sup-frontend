@@ -1,5 +1,5 @@
 import { useToast } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
@@ -14,9 +14,10 @@ import {
     StyledH1,
     SignupCTA,
 } from "./styles";
-import { urlPrefix } from "../../utils/config";
+import { GrHide, BiHide, BiShow } from "react-icons/all";
+import AuthService from "../../services/AuthService"
+
 function Login() {
-    console.log("Login urlPrefix : ",urlPrefix)
     const { isAuthenticated } = useSelector((state) => state.userDetails);
     let dispatch = useDispatch();
     const toast = useToast();
@@ -25,16 +26,9 @@ function Login() {
         e.preventDefault();
         const fd = new FormData(e.currentTarget);
 
-        fetch(`${urlPrefix}/api/auth/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials:"include",
-            body: JSON.stringify({
-                username: fd.get("username"),
-                password: fd.get("password"),
-            }),
+        AuthService.loginUser({
+            username: fd.get("username"),
+            password: fd.get("password"),
         })
             .then((res) => res.json())
             .then((data) => {
@@ -68,13 +62,25 @@ function Login() {
                 }
             })
             .catch((err) => {
-                console.log(err);
+                console.log("Login error : ", err);
+                // Show toast
+                toast({
+                    duration: 5000,
+                    description: `Failed to login ${err}`,
+                    status: "error",
+                    isClosable: true,
+                })
             });
+
     };
     const goToPage = (path) => {
         history.push(path);
     };
-    console.log("Login component isAuthenticated : ",isAuthenticated)
+    console.log("Login component isAuthenticated : ", isAuthenticated);
+    const [isPasswordHidden, setPasswordHidden] = useState(true);
+    const togglePasswordHide = () => {
+        setPasswordHidden((curr) => !curr);
+    };
     return (
         <StyledAuthPage>
             <StyledForm onSubmit={loginUser}>
@@ -85,7 +91,19 @@ function Login() {
                 </FormItem>
                 <FormItem>
                     <StyledLabel htmlFor="password">Password</StyledLabel>
-                    <StyledInput type="password" name="password" id="password" required={true} />
+                    <div className="flex relative">
+                        <StyledInput
+                            type={isPasswordHidden ? "password" : "text"}
+                            name="password"
+                            id="password"
+                            required={true}
+                        />
+                        {isPasswordHidden ? (
+                            <BiShow size={"22px"} onClick={togglePasswordHide} className="absolute right-2 top-1.5" />
+                        ) : (
+                            <BiHide size={"22px"} onClick={togglePasswordHide} className="absolute right-2 top-1.5" />
+                        )}
+                    </div>
                 </FormItem>
                 <SignupCTA>
                     Don't have an account? <span onClick={() => goToPage("/signup")}>Signup</span> now

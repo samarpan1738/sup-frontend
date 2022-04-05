@@ -5,7 +5,7 @@ export const StyledModal = styled.div`
     width: 100vw;
     height: 100vh;
     background-color: rgb(122 131 128 / 80%);
-    z-index: 10;
+    z-index: 11;
     display: flex;
     justify-content: center;
     // align-items:center;

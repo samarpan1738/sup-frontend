@@ -1,82 +1,61 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { urlPrefix } from "../../../utils/config";
+import ConversationService from "../../../services/ConversationService";
 
-export const deleteConversationMessages = createAsyncThunk(
-    "conversations/clearChat",
-    async ({ conversationId }, thunkAPI) => {
-        try {
-            const res = await fetch(`${urlPrefix}/api/conversations/${conversationId}/messages`, {
-                method: "delete",
-                credentials: "include",
-            });
-            const data = await res.json();
-            if (data.success) {
-                // dispatch(setConversationMessages({ id: conversationId, data: {} }));
+export const deleteConversationMessages = createAsyncThunk("conversations/clearChat", async ({ conversationId }, thunkAPI) => {
+    try {
+        const res = await ConversationService.deleteAllMessagesInConversation(conversationId);
+        const data = await res.json();
+        if (data.success) {
+            // dispatch(setConversationMessages({ id: conversationId, data: {} }));
 
-                return { id: conversationId, data: {} };
-            } else {
-                thunkAPI.rejectWithValue("Unable to clear chat");
-            }
-            return data;
-        } catch (error) {
-            return thunkAPI.rejectWithValue("Error while fetching users by query text");
+            return { id: conversationId, data: {} };
+        } else {
+            thunkAPI.rejectWithValue("Unable to clear chat");
         }
+        return data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue("Error while fetching users by query text");
     }
-);
+});
 
-export const fetchConversations = createAsyncThunk(
-    "conversations/fetchConversations",
-    async ({ history }, thunkAPI) => {
-        try {
-            const res = await fetch(`${urlPrefix}/api/conversations`, {
-                credentials: "include",
-            });
-
-            if (res.status === 401 || res.status === 403) {
-                // Handle this error
-                return;
-            }
-
-            const data = await res.json();
-            console.log(data);
-
-            if (data.success === true) {
-                return data.data;
-            }
-        } catch (error) {
-            console.log(error);
-            thunkAPI.rejectWithValue("Error fetching conversations");
-        }
-    }
-);
-export const addConversation = createAsyncThunk(
-    "conversations/addConversation",
-    async ({ userId, type, history }, thunkApi) => {
-        const res = await fetch(`${urlPrefix}/api/conversations/`, {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({
-                users: [userId],
-                type,
-            }),
-        });
+export const fetchConversations = createAsyncThunk("conversations/fetchConversations", async ({ history }, thunkAPI) => {
+    try {
+        const res = await ConversationService.getAllConversations();
 
         if (res.status === 401 || res.status === 403) {
-            return history.push("/login");
+            // Handle this error
+            return;
         }
-        const data = await res.json();
 
-        console.log("data : ", data);
-        if (data.success) {
+        const data = await res.json();
+        console.log(data);
+
+        if (data.success === true) {
             return data.data;
-        } else {
-            thunkApi.rejectWithValue("Error adding conversation");
         }
+    } catch (error) {
+        console.log(error);
+        thunkAPI.rejectWithValue("Error fetching conversations");
     }
-);
+});
+export const addConversation = createAsyncThunk("conversations/addConversation", async ({ userId, type, history }, thunkApi) => {
+    const res = await ConversationService.createContact({
+        users: [userId],
+        type,
+    });
+
+    if (res.status === 401 || res.status === 403) {
+        return history.push("/login");
+    }
+    const data = await res.json();
+
+    console.log("data : ", data);
+    if (data.success) {
+        return data.data;
+    } else {
+        thunkApi.rejectWithValue("Error adding conversation");
+    }
+});
 
 export const conversationsSlice = createSlice({
     name: "conversations",
@@ -92,6 +71,7 @@ export const conversationsSlice = createSlice({
             console.log("state[conversationId] : ", state[conversationId]);
             const messages = state[conversationId].messages;
             const groupKey = action.payload.data.createdAt.substring(0, 10);
+            console.log("groupKey : ", groupKey, ", messages : ", messages, " ,messages[groupKey] : ", messages[groupKey]);
             if (!messages[groupKey]) messages[groupKey] = {};
             const isMsgRead = action.payload.myId === action.payload.data.sender_id;
             messages[groupKey][messageId] = { ...action.payload.data, read: isMsgRead };

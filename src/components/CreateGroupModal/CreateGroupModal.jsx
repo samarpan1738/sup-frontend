@@ -1,12 +1,12 @@
 import { useToast } from "@chakra-ui/react";
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { setModalOpen } from "../../store/slices/modal/modalSlice";
 import { StyledClosePanelIcon } from "../CurrentChat/styledComponents";
 import Modal from "../Modal/Modal";
 import { StyledModalBox, StyledSelect } from "./styles";
-import { urlPrefix } from "../../utils/config";
+import ConversationService from "../../services/ConversationService"
 
 function CreateGroupModal() {
     const dispatch = useDispatch();
@@ -17,10 +17,7 @@ function CreateGroupModal() {
     const options = contacts.map((contactId) => {
         console.log(conversations[contactId].users);
         const userIds = Object.keys(conversations[contactId].users);
-        const userObj =
-            userIds[0] != userId
-                ? conversations[contactId].users[userIds[0]]
-                : conversations[contactId].users[userIds[1]];
+        const userObj = conversations[contactId].users[userIds[0]];
         return {
             label: userObj.name,
             value: `${userObj.id}`,
@@ -39,18 +36,11 @@ function CreateGroupModal() {
         const users = selectedOptions.map(({ value }) => {
             return value;
         });
-        fetch(`${urlPrefix}/api/conversations/`, {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json",
-            },
-            credentials:"include",
-            body: JSON.stringify({
-                type: "GROUP",
-                users,
-                title,
-                description,
-            }),
+        ConversationService.createGroup({
+            type: "GROUP",
+            users,
+            title,
+            description,
         })
             .then((res) => {
                 if (res.status === 401 || res.status === 403) {
@@ -94,7 +84,7 @@ function CreateGroupModal() {
     };
 
     // console.log("options : ", options);
-    useEffect(() => {}, []);
+    useEffect(() => { }, []);
     return (
         <Modal target="createGroup">
             <StyledModalBox onClick={(e) => e.stopPropagation()}>

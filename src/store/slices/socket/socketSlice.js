@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {io} from "socket.io-client";
 import { urlPrefix } from "../../../utils/config";
+
 console.log("socketSlice urlPrefix : ",urlPrefix)
 export const socket = io(urlPrefix);
 socket.on("connect", (data) => {
     console.log("Connected to socket server");
-    
 });
 // socket.on("message", (data) => {
 //     console.log("message from socket server : ",data);

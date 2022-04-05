@@ -11,9 +11,10 @@ import SearchUsersModal from "../../components/SearchUsersModal/SearchUsersModal
 import CreateGroupModal from "../../components/CreateGroupModal/CreateGroupModal";
 import CurrentGroup from "../../components/CurrentGroup/CurrentGroup";
 import GroupInfoPanel from "../../components/CurrentGroup/GroupInfoPanel";
-import { Redirect } from "react-router";
+import { Navigate } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import Settings from "../../components/Settings/Settings";
+import AddGroupParticipantsModal from "../../components/AddGroupParticipantsModal/AddGroupParticipantsModal";
 const StyledDashboard = styled.div`
     background-color: white;
     color: white;
@@ -25,7 +26,7 @@ const StyledDashboard = styled.div`
 function Dashboard() {
     const { conversationId } = useSelector((state) => state.currentChat);
     const conversations = useSelector((state) => state.conversations);
-    const { search: isSearchModalOpen, createGroup: isGroupModalOpen } = useSelector((state) => state.modal);
+    const { search: isSearchModalOpen, createGroup: isGroupModalOpen,addGroupParticipants:isAddGroupParticipantsModalOpen } = useSelector((state) => state.modal);
     const { isAuthenticated, tokenExpired } = useSelector((state) => state.userDetails);
     const { isSettingsOpen } = useSelector((state) => state.dashboard);
     const currentChat  = useSelector((state) => state.currentChat);
@@ -33,6 +34,7 @@ function Dashboard() {
     return isAuthenticated ? (
         <StyledDashboard>
             {isSearchModalOpen && <SearchUsersModal />}
+            {isAddGroupParticipantsModalOpen && <AddGroupParticipantsModal currentConversationId ={conversationId}/>}
             {isGroupModalOpen && <CreateGroupModal />}
             <Sidebar />
             {isSettingsOpen ? <Settings/> : conversationId && conversations[conversationId] ? (
@@ -44,7 +46,7 @@ function Dashboard() {
                 ) : (
                     <>
                         <CurrentGroup conversation={conversations[conversationId]} />
-                        <GroupInfoPanel />{" "}
+                        {currentChat.isProfileOpen && <GroupInfoPanel currentChat={currentChat}/>}
                     </>
                 )
             ) : (
@@ -56,7 +58,7 @@ function Dashboard() {
     !tokenExpired ? (
         <Loader/>
     ) : (
-        <Redirect to="/login" />
+        <Navigate to="/login" />
     );
 }
 

@@ -17,10 +17,11 @@
     "framer-motion": "4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-icons": "^4.3.1",
     "react-query": "^3.34.7",
     "react-redux": "^7.2.4",
     "react-router": "^5.2.1",
-    "react-router-dom": "^5.3.0",
+    "react-router-dom": "6",
     "react-scripts": "4.0.3",
     "react-select": "^5.2.1",
     "redux-logger": "^3.0.6",
@@ -54,7 +55,10 @@
   },
   "devDependencies": {
     "autoprefixer": "9",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
     "postcss": "7",
+    "redux-mock-store": "^1.5.4",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   }
 }

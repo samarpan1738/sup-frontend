@@ -15,6 +15,10 @@ const List=function () {
     const conversations = useSelector((store) => store.conversations);
     // * 1. Shows recent conversations
     // * 2. Shows search results
+    // console.log(`Object.keys(conversations).length : ${Object.keys(conversations).length}`);
+    if(Object.keys(conversations).length === 0){
+        return <div className="text-gray-600 h-1/5 w-full flex items-center justify-center">No conversations</div>
+    }
     return (
         <StyledList>
             <div>

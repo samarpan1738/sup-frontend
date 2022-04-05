@@ -14,7 +14,7 @@ import { deleteConversationMessages, markMessagesRead } from "../../store/slices
 import MessageBox from "../MessageBox/MessageBox";
 import MessageList from "../MessageList/MessageList";
 import GifPanel from "../GifPanel/GifPanel";
-import { urlPrefix } from "../../utils/config";
+import ConversationService from "../../services/ConversationService";
 const styles = {
     "--flex-grow": "2",
     "--justify-content": "space-between",
@@ -63,7 +63,7 @@ const CurrentChat = React.memo(({ conversation }) => {
 
     const clearChat = () => {
         toggleMenuState();
-        dispatch(deleteConversationMessages({conversationId:conversation.id}));
+        dispatch(deleteConversationMessages({ conversationId: conversation.id }));
     };
     useEffect(() => {
         // Api call to mark all unread messages as read
@@ -77,12 +77,8 @@ const CurrentChat = React.memo(({ conversation }) => {
             });
         });
         if (unreadMsgIds.length > 0) {
-            fetch(`${urlPrefix}/api/conversations/${currentChat.conversationId}/messages/markRead`, {
-                method: "POST",
-                credentials:"include",
-                body: JSON.stringify({
-                    messageIds: unreadMsgIds.map(({ id }) => id),
-                }),
+            ConversationService.markConversationMessagesAsRead(currentChat.conversationId, {
+                messageIds: unreadMsgIds.map(({ id }) => id),
             })
                 .then((res) => res.json())
                 .then((data) => {
@@ -90,7 +86,7 @@ const CurrentChat = React.memo(({ conversation }) => {
                 });
             dispatch(markMessagesRead({ conversationId: currentChat.conversationId.toString(), unreadMsgIds }));
         }
-    }, [currentChat.conversationId, conversation.messages,dispatch]);
+    }, [currentChat.conversationId, conversation.messages, dispatch]);
     // console.log("Current chat re-render")
     return (
         <StyledSection style={styles}>

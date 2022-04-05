@@ -13,7 +13,8 @@ import {
     StyledH1,
     SignupCTA,
 } from "./styles";
-import { urlPrefix } from "../../utils/config";
+import AuthService from "../../services/AuthService";
+
 function Signup() {
     const { isAuthenticated } = useSelector((state) => state.userDetails);
     const history = useHistory();
@@ -22,19 +23,12 @@ function Signup() {
         e.preventDefault();
         const fd = new FormData(e.currentTarget);
 
-        fetch(`${urlPrefix}/api/auth/signup`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials:"include",
-            body: JSON.stringify({
-                username: fd.get("username"),
-                password: fd.get("password"),
-                name: fd.get("name"),
-                email: fd.get("email"),
-                profile_pic_uri:`https://avatars.dicebear.com/api/pixel-art/${fd.get("username")}.svg`
-            }),
+        AuthService.createUser({
+            username: fd.get("username"),
+            password: fd.get("password"),
+            name: fd.get("name"),
+            email: fd.get("email"),
+            profile_pic_uri: `https://avatars.dicebear.com/api/pixel-art/${fd.get("username")}.svg`
         })
             .then((res) => res.json())
             .then((data) => {
@@ -68,7 +62,7 @@ function Signup() {
         if (isAuthenticated === true) {
             history.push("/dashboard");
         }
-    }, [isAuthenticated,history]);
+    }, [isAuthenticated, history]);
     return (
         <StyledAuthPage>
             <StyledForm onSubmit={loginUser}>

@@ -1,11 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { urlPrefix } from "../../../utils/config";
+import GifService from "../../../services/GifService";
 
 export const fetchTrendingGifs = createAsyncThunk("gifs/fetchTrendingGifs", async (queryText, thunkAPI) => {
     try {
-        const response = await fetch(`${urlPrefix}/api/gif/trending?limit=30`,{
-            credentials:"include",
-        });
+        const response = await GifService.getTrendingGifs();
         const data = await response.json();
         return data.data;
     } catch (error) {

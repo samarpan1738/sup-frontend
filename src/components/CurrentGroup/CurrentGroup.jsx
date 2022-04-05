@@ -9,7 +9,7 @@ import { useToast } from "@chakra-ui/react";
 import MessageBox from "../MessageBox/MessageBox";
 import MessageList from "../MessageList/MessageList";
 import GifPanel from "../GifPanel/GifPanel";
-import { urlPrefix } from "../../utils/config";
+import ConversationService from "../../services/ConversationService";
 const styles = {
     "--flex-grow": "2",
     "--justify-content": "space-between",
@@ -59,13 +59,7 @@ function CurrentGroup({ conversation }) {
 
     const clearChat = () => {
         toggleMenuState();
-        fetch(`${urlPrefix}/api/conversations/${currentChat.conversationId}/messages`, {
-            method: "delete",
-            credentials: "include",
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        })
+        ConversationService.deleteAllMessagesInConversation(currentChat.conversationId)
             .then((res) => res.json())
             .then((data) => {
                 if (data.success) {
@@ -101,12 +95,8 @@ function CurrentGroup({ conversation }) {
             });
         });
         if (unreadMsgIds.length > 0) {
-            fetch(`${urlPrefix}/api/conversations/${currentChat.conversationId}/messages/markRead`, {
-                method: "POST",
-                credentials: "include",
-                body: JSON.stringify({
-                    messageIds: unreadMsgIds.map(({ id }) => id),
-                }),
+            ConversationService.markConversationMessagesAsRead(currentChat.conversationId, {
+                messageIds: unreadMsgIds.map(({ id }) => id),
             })
                 .then((res) => res.json())
                 .then((data) => {

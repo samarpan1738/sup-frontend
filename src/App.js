@@ -1,6 +1,6 @@
 import "./App.css";
 import { Dashboard, Login } from "./pages";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
 import styled from "styled-components";
 import { ChakraProvider } from "@chakra-ui/react";
@@ -8,8 +8,8 @@ import Signup from "./pages/Auth/Signup";
 import Loader from "./components/Loader/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserDetails } from "./store/slices/userDetails/userDetailsSlice";
-import { urlPrefix } from "./utils/config";
-import axios from "axios";
+import { useState } from "react";
+import UserService from "./services/UserService";
 
 const StyledApp = styled.div`
     background-color: black;
@@ -24,27 +24,26 @@ const StyledApp = styled.div`
 function App() {
     const { isAuthenticated, tokenExpired } = useSelector((state) => state.userDetails);
     const dispatch = useDispatch();
-
+    const [isLoading, setIsLoading] = useState(true);
     if (isAuthenticated === false && tokenExpired == false) {
         console.log(`isAuthenticated : ${isAuthenticated} , tokenExpired : ${tokenExpired}`);
-        axios
-            .get(`${urlPrefix}/api/user/`, {
-                withCredentials: true,
-            })
-            .then((res) => {
-                console.log("user data", res.data);
-                if (res.data && res.data.success === true) {
+        UserService.getLoggedInUserDetails()
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("user data", data);
+                setIsLoading(false);
+                if (data && data.success === true) {
                     console.log("Setting user details");
                     dispatch(
                         setUserDetails({
                             isAuthenticated: true,
                             tokenExpired: false,
-                            name: res.data.data.name,
-                            email: res.data.data.email,
-                            userId: res.data.data.id,
-                            profile_pic_uri: res.data.data.profile_pic_uri,
-                            status: res.data.data.status,
-                            username: res.data.data.username,
+                            name: data.data.name,
+                            email: data.data.email,
+                            userId: data.data.id,
+                            profile_pic_uri: data.data.profile_pic_uri,
+                            status: data.data.status,
+                            username: data.data.username,
                         })
                     );
                 } else {
@@ -58,6 +57,7 @@ function App() {
             })
             .catch((err) => {
                 console.log("err", err);
+                setIsLoading(false);
                 dispatch(
                     setUserDetails({
                         isAuthenticated: false,
@@ -66,33 +66,31 @@ function App() {
                 );
             });
     }
-    const isLoading = isAuthenticated === false && tokenExpired === false;
+    // const isLoading = isAuthenticated === false && tokenExpired === false;
     return (
         <ChakraProvider>
             <BrowserRouter>
-                <Switch>
-                    <Route exact path="/">
-                        {/* Wait if isAuthenticated === false and tokenExpired === false */}
-                        {isLoading ? (
-                            <Loader />
-                        ) : isAuthenticated === true ? (
-                            <Redirect to="/dashboard" />
-                        ) : (
-                            <Redirect to="/login" />
-                        )}
-                    </Route>
-                    <Route exact path="/login">
-                        {isLoading ? <Loader /> : isAuthenticated === true ? <Redirect to="/dashboard" /> : <Login />}
-                    </Route>
-                    <Route exact path="/signup">
-                        {isAuthenticated ? <Redirect to="/dashboard" /> : <Signup />}
-                    </Route>
-                    <Route exact path="/dashboard">
-                        <StyledApp>
-                            <Dashboard />
-                        </StyledApp>
-                    </Route>
-                </Switch>
+                <Routes>
+                    <Route
+                        path="/"
+                        element={
+                            isLoading ? <Loader /> : isAuthenticated === true ? <Navigate to="/dashboard" /> : <Navigate to="/login" />
+                        }
+                    />
+                    <Route
+                        path="/login"
+                        element={isLoading ? <Loader /> : isAuthenticated === true ? <Navigate to="/dashboard" /> : <Login />}
+                    />
+                    <Route path="/signup" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Signup />} />
+                    <Route
+                        path="/dashboard"
+                        element={
+                            <StyledApp>
+                                <Dashboard />
+                            </StyledApp>
+                        }
+                    />
+                </Routes>
             </BrowserRouter>
         </ChakraProvider>
     );

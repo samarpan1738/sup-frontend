@@ -3,12 +3,12 @@ export const StyledAuthPage = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 70%;
+    height: 80%;
 `;
 export const FormItem = styled.div`
     display: flex;
     flex-direction: column;
-    margin-bottom: 10px;
+    margin-bottom: 16px;
 `;
 export const StyledLabel = styled.label`
     font-size: 14px;
@@ -16,7 +16,9 @@ export const StyledLabel = styled.label`
 `;
 export const StyledInput = styled.input`
     border: 1px solid black;
-    padding: 2px 10px;
+    padding: 4px 10px;
+    font-size: 16px;
+    width:100%;
 `;
 export const StyledForm = styled.form`
     width: 400px;

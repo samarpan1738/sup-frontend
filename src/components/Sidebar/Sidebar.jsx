@@ -10,7 +10,8 @@ import { setUserDetails } from "../../store/slices/userDetails/userDetailsSlice"
 import { setModalOpen } from "../../store/slices/modal/modalSlice";
 import { useHistory } from "react-router";
 import { setDashboard } from "../../store/slices/dashboard/dashboardSlice";
-import { urlPrefix } from "../../utils/config";
+import {GrSettingsOption,GrLogout, GrGroup} from "react-icons/gr"
+import AuthService from "../../services/AuthService";
 
 const styles = {
     "--flex-grow": "1.1",
@@ -46,10 +47,7 @@ function Sidebar() {
         }
     }, [isAuthenticated, dispatch, history]);
     const logout = function () {
-        fetch(`${urlPrefix}/api/auth/logout`, {
-            method: "GET",
-            credentials: "include",
-        })
+        AuthService.logoutUser()
             .then((res) => {
                 if (res.status === 401 || res.status === 403) {
                     return history.push("/login");
@@ -97,9 +95,9 @@ function Sidebar() {
                     <button onClick={toggleMenuState}>{iconMappings["menu"]}</button>
                     {menu === true && (
                         <StyledMenu ref={menuRef} onClick={toggleMenuState}>
-                            <DropdownMenuItem onClick={() => openModal("createGroup")}>Create Group</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => dispatch(setDashboard({isSettingsOpen:true}))}>Settings</DropdownMenuItem>
-                            <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => openModal("createGroup")}><GrGroup/> <div className="w-4"></div>Create Group</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => dispatch(setDashboard({isSettingsOpen:true}))}><GrSettingsOption/> <div className="w-4"></div> Settings</DropdownMenuItem>
+                            <DropdownMenuItem onClick={logout}><GrLogout/><div className="w-4"></div>Log out</DropdownMenuItem>
                         </StyledMenu>
                     )}
                 </StyledIconContainer>

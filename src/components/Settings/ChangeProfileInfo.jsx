@@ -3,7 +3,6 @@ import classNames from "classnames";
 import { persistUserDetails } from "../../store/slices/userDetails/userDetailsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "react-query";
-import { urlPrefix } from "../../utils/config";
 
 function ChangeProfileInfo({ selectedMenuItem }) {
     console.log("Rendering ChangeProfileInfo");

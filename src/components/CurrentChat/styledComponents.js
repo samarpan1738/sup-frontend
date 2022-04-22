@@ -46,17 +46,7 @@ export const StyledMessageBox = styled.div`
         font-size: 12px;
         letter-spacing: 1px;
     }
-    & > span {
-    }
-    & > div + div {
-        // margin-left: 14px;
-        font-size: 12px;
-        letter-spacing: 1px;
-        width: 80px;
-        display: flex;
-        align-items: flex-end;
-        justify-content: flex-end;
-    }
+    
     & .StyledMessageBox_text {
         padding:0 6px;
     }

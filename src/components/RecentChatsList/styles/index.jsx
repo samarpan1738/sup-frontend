@@ -19,16 +19,22 @@ export const StyledDetailsContainer = styled.div`
         }
     }
     & > p + p {
-        font-size: 14px;
-        font-weight: normal;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
+        // font-size: 14px;
+        // font-weight: normal;
+        // text-overflow: ellipsis;
+        // overflow: hidden;
+        // white-space: nowrap;
+
         // width: 314px;
     }
     & > .conversation_last_message {
         color: #5e5b5b;
         font-size: 14px;
+        font-weight: normal;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;  
+        overflow: hidden;
     }
 `;
 

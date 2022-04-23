@@ -13,6 +13,7 @@ import {
     StyledButton,
     StyledH1,
     SignupCTA,
+    ForgotPasswordCTA,
 } from "./styles";
 import { GrHide, BiHide, BiShow } from "react-icons/all";
 import AuthService from "../../services/AuthService"
@@ -84,13 +85,15 @@ function Login() {
     return (
         <StyledAuthPage>
             <StyledForm onSubmit={loginUser}>
-                <StyledH1>login</StyledH1>
+                <StyledH1>Log in</StyledH1>
                 <FormItem>
                     <StyledLabel htmlFor="username">Username</StyledLabel>
                     <StyledInput type="text" name="username" id="username" required={true} />
                 </FormItem>
                 <FormItem>
-                    <StyledLabel htmlFor="password">Password</StyledLabel>
+                    <StyledLabel htmlFor="password">
+                        Password
+                    </StyledLabel>
                     <div className="flex relative">
                         <StyledInput
                             type={isPasswordHidden ? "password" : "text"}

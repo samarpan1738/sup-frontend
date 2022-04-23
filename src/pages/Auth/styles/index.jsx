@@ -8,17 +8,21 @@ export const StyledAuthPage = styled.div`
 export const FormItem = styled.div`
     display: flex;
     flex-direction: column;
-    margin-bottom: 16px;
+    margin-bottom: 24px;
+    :last-of-type {
+        margin-bottom: 10px;
+    }
 `;
 export const StyledLabel = styled.label`
     font-size: 14px;
     margin-bottom: 4px;
 `;
 export const StyledInput = styled.input`
-    border: 1px solid black;
+    border: 1px solid #cececa;
     padding: 4px 10px;
     font-size: 16px;
     width:100%;
+    border-radius:5px;
 `;
 export const StyledForm = styled.form`
     width: 400px;
@@ -34,6 +38,7 @@ export const StyledButton = styled.button`
     border: 2px solid black;
     position:relative;
     overflow: hidden;
+    border-radius:5px;
     &:hover {
         background-color: white;
         color: black;
@@ -56,7 +61,7 @@ export const StyledButton = styled.button`
 `;
 export const StyledH1 = styled.h1`
     font-size: 30px;
-    margin-bottom: 14px;
+    margin-bottom: 24px;
 `;
 
 export const SignupCTA = styled.p`
@@ -68,3 +73,8 @@ export const SignupCTA = styled.p`
         cursor: pointer;
     }
 `;
+
+export const ForgotPasswordCTA = styled.div`
+    color:#1252f7;
+    // color:#3069fe;
+`

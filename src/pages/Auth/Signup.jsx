@@ -66,7 +66,7 @@ function Signup() {
     return (
         <StyledAuthPage>
             <StyledForm onSubmit={loginUser}>
-                <StyledH1>signup</StyledH1>
+                <StyledH1>Sign up</StyledH1>
                 <FormItem>
                     <StyledLabel htmlFor="name">Name</StyledLabel>
                     <StyledInput type="text" name="name" id="name" required={true} />

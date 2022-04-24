@@ -3,7 +3,7 @@ const API_BASE_URL = urlPrefix + "/api/auth";
 
 class AuthService {
     createUser(user) {
-        fetch(`${API_BASE_URL}/signup`, {
+        return fetch(`${API_BASE_URL}/signup`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

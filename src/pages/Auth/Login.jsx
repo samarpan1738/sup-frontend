@@ -2,7 +2,7 @@ import { useToast } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { setUserDetails } from "../../store/slices/userDetails/userDetailsSlice";
 import {
     StyledAuthPage,
@@ -22,7 +22,7 @@ function Login() {
     const { isAuthenticated } = useSelector((state) => state.userDetails);
     let dispatch = useDispatch();
     const toast = useToast();
-    let history = useHistory();
+    let navigate = useNavigate();
     const loginUser = (e) => {
         e.preventDefault();
         const fd = new FormData(e.currentTarget);
@@ -75,7 +75,7 @@ function Login() {
 
     };
     const goToPage = (path) => {
-        history.push(path);
+        navigate(path);
     };
     console.log("Login component isAuthenticated : ", isAuthenticated);
     const [isPasswordHidden, setPasswordHidden] = useState(true);

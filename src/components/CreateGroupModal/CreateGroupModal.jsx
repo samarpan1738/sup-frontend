@@ -1,12 +1,12 @@
 import { useToast } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from "react-router";
 import { setModalOpen } from "../../store/slices/modal/modalSlice";
 import { StyledClosePanelIcon } from "../CurrentChat/styledComponents";
 import Modal from "../Modal/Modal";
 import { StyledModalBox, StyledSelect } from "./styles";
 import ConversationService from "../../services/ConversationService"
+import { useNavigate } from "react-router-dom";
 
 function CreateGroupModal() {
     const dispatch = useDispatch();
@@ -24,7 +24,7 @@ function CreateGroupModal() {
         };
     });
     const toast = useToast();
-    const history = useHistory();
+    const navigate = useNavigate();
     const handleFormSubmit = (e) => {
         e.preventDefault();
         const fd = new FormData(e.target);
@@ -44,7 +44,7 @@ function CreateGroupModal() {
         })
             .then((res) => {
                 if (res.status === 401 || res.status === 403) {
-                    return history.push("/login");
+                    return navigate("/login");
                 }
                 return res.json();
             })

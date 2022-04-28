@@ -1,7 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 import {
     StyledAuthPage,
@@ -17,7 +17,7 @@ import AuthService from "../../services/AuthService";
 
 function Signup() {
     const { isAuthenticated } = useSelector((state) => state.userDetails);
-    const history = useHistory();
+    const navigate = useNavigate();
     const toast = useToast();
     const loginUser = (e) => {
         e.preventDefault();
@@ -41,7 +41,7 @@ function Signup() {
                         duration: 5000,
                         isClosable: true,
                     });
-                    history.push("/login");
+                    navigate("/login");
                 } else {
                     toast({
                         title: data.message,
@@ -56,13 +56,13 @@ function Signup() {
             });
     };
     const goToPage = (path) => {
-        history.push(path);
+        navigate(path);
     };
     useEffect(() => {
         if (isAuthenticated === true) {
-            history.push("/dashboard");
+            navigate("/dashboard");
         }
-    }, [isAuthenticated, history]);
+    }, [isAuthenticated, navigate]);
     return (
         <StyledAuthPage>
             <StyledForm onSubmit={loginUser}>

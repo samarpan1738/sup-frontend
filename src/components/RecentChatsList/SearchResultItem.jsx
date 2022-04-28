@@ -3,8 +3,8 @@ import { Avatar, useToast } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { StyledDetailsContainer } from "./styles";
 import styled from "styled-components";
-import { useHistory } from "react-router";
 import { addConversation } from "../../store/slices/conversations/conversationsSlice";
+import { useNavigate } from "react-router-dom";
 
 const SriStyledDetailsContainer = styled(StyledDetailsContainer)`
     display: flex;
@@ -43,7 +43,7 @@ const StyledListItem = styled.div`
 `;
 
 function SearchResultItem({ user, added }) {
-    const history = useHistory();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const userDetails = useSelector((state) => state.userDetails);
     const toast = useToast();
@@ -58,7 +58,7 @@ function SearchResultItem({ user, added }) {
         setHovered(false);
     };
     const addUser = () => {
-        dispatch(addConversation({ userId: user.id, type: "CONTACT", history }));
+        dispatch(addConversation({ userId: user.id, type: "CONTACT", navigate }));
     };
     return (
         <StyledListItem>

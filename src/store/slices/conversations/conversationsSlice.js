@@ -18,7 +18,7 @@ export const deleteConversationMessages = createAsyncThunk("conversations/clearC
     }
 });
 
-export const fetchConversations = createAsyncThunk("conversations/fetchConversations", async ({ history }, thunkAPI) => {
+export const fetchConversations = createAsyncThunk("conversations/fetchConversations", async ({  }, thunkAPI) => {
     try {
         const res = await ConversationService.getAllConversations();
 
@@ -38,14 +38,14 @@ export const fetchConversations = createAsyncThunk("conversations/fetchConversat
         thunkAPI.rejectWithValue("Error fetching conversations");
     }
 });
-export const addConversation = createAsyncThunk("conversations/addConversation", async ({ userId, type, history }, thunkApi) => {
+export const addConversation = createAsyncThunk("conversations/addConversation", async ({ userId, type,navigate }, thunkApi) => {
     const res = await ConversationService.createContact({
         users: [userId],
         type,
     });
 
     if (res.status === 401 || res.status === 403) {
-        return history.push("/login");
+        return navigate("/login");
     }
     const data = await res.json();
 

@@ -8,10 +8,10 @@ import { addMessageToConversation, fetchConversations } from "../../store/slices
 import styled from "styled-components";
 import { setUserDetails } from "../../store/slices/userDetails/userDetailsSlice";
 import { setModalOpen } from "../../store/slices/modal/modalSlice";
-import { useHistory } from "react-router";
 import { setDashboard } from "../../store/slices/dashboard/dashboardSlice";
-import {GrSettingsOption,GrLogout, GrGroup} from "react-icons/gr"
+import { GrSettingsOption, GrLogout, GrGroup } from "react-icons/gr"
 import AuthService from "../../services/AuthService";
+import { useNavigate } from "react-router-dom";
 
 const styles = {
     "--flex-grow": "1.1",
@@ -29,7 +29,7 @@ const DropdownMenuItem = styled.div`
 
 function Sidebar() {
     const { isAuthenticated, userId, profile_pic_uri } = useSelector((state) => state.userDetails);
-    const history = useHistory();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const currentChat = useSelector((state) => state.currentChat);
     const conversations = useSelector((state) => state.conversations);
@@ -43,14 +43,14 @@ function Sidebar() {
     };
     useEffect(() => {
         if (isAuthenticated === true) {
-            dispatch(fetchConversations({ history }));
+            dispatch(fetchConversations({}));
         }
-    }, [isAuthenticated, dispatch, history]);
+    }, [isAuthenticated, dispatch]);
     const logout = function () {
         AuthService.logoutUser()
             .then((res) => {
                 if (res.status === 401 || res.status === 403) {
-                    return history.push("/login");
+                    return navigate("/login");
                 }
                 return res.json();
             })
@@ -95,9 +95,9 @@ function Sidebar() {
                     <button onClick={toggleMenuState}>{iconMappings["menu"]}</button>
                     {menu === true && (
                         <StyledMenu ref={menuRef} onClick={toggleMenuState}>
-                            <DropdownMenuItem onClick={() => openModal("createGroup")}><GrGroup/> <div className="w-4"></div>Create Group</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => dispatch(setDashboard({isSettingsOpen:true}))}><GrSettingsOption/> <div className="w-4"></div> Settings</DropdownMenuItem>
-                            <DropdownMenuItem onClick={logout}><GrLogout/><div className="w-4"></div>Log out</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => openModal("createGroup")}><GrGroup /> <div className="w-4"></div>Create Group</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => dispatch(setDashboard({ isSettingsOpen: true }))}><GrSettingsOption /> <div className="w-4"></div> Settings</DropdownMenuItem>
+                            <DropdownMenuItem onClick={logout}><GrLogout /><div className="w-4"></div>Log out</DropdownMenuItem>
                         </StyledMenu>
                     )}
                 </StyledIconContainer>

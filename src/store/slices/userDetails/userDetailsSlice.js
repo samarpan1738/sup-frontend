@@ -17,15 +17,48 @@ export const persistUserDetails = createAsyncThunk("userDetails/persistUserDetai
         thunkApi.rejectWithValue("Error updating user details");
     }
 });
+export const populateUserDetails = createAsyncThunk("userDetails/populateUserDetails", async (data, thunkApi) => {
+    try {
+        const res = await UserService.getLoggedInUserDetails();
+        const data = await res.json();
+        console.log("data : ", data);
+        if (data && data.success) {
+            return {
+                isAuthenticated: true,
+                tokenExpired: false,
+                loading: false,
+                name: data.data.name,
+                email: data.data.email,
+                userId: data.data.id,
+                profile_pic_uri: data.data.profile_pic_uri,
+                status: data.data.status,
+                username: data.data.username,
+            }
+        } else {
+            thunkApi.rejectWithValue({
+                isAuthenticated: false,
+                tokenExpired: true,
+                loading: false
+            });
+        }
+    } catch (error) {
+        thunkApi.rejectWithValue({
+            isAuthenticated: false,
+            tokenExpired: true,
+            loading: false
+        });
+    }
+})
 export const userDetailsSlice = createSlice({
     name: "userDetails",
     initialState: {
         isAuthenticated: false,
         tokenExpired: false,
+        loading: true
     },
     reducers: {
         setUserDetails: (state, action) => {
-            state = { ...state, ...action.payload };
+            state = { ...state, ...action.payload, loading: false };
             return state;
         },
     },
@@ -44,6 +77,23 @@ export const userDetailsSlice = createSlice({
             console.log("userDetails/persistUserDetails");
             // Rejected with thunkAPI.rejectWithValue
             console.log(action.payload);
+        });
+
+        //* For populateUserDetails thunk
+        builder.addCase(populateUserDetails.pending, (state, action) => {
+            console.log("userDetails/populateUserDetails");
+        });
+        builder.addCase(populateUserDetails.fulfilled, (state, action) => {
+            console.log("userDetails/persistUserDetails");
+            console.log(action.payload);
+            state = action.payload;
+            return state;
+        });
+        builder.addCase(populateUserDetails.rejected, (state, action) => {
+            console.log("userDetails/persistUserDetails");
+            // Rejected with thunkAPI.rejectWithValue
+            state = action.payload;
+            return state;
         });
     },
 });

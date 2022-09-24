@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 import { populateUserDetails } from "../../store/slices/userDetails/userDetailsSlice";
 import Loader from "../Loader/Loader";
-function AuthGuard({ authenticated, navigateTo }) {
+function AuthGuard({ allowAuthenticated, failureRedirect }) {
 	const { isAuthenticated, tokenExpired, loading } = useSelector(
 		(state) => state.userDetails
 	);
@@ -17,9 +17,9 @@ function AuthGuard({ authenticated, navigateTo }) {
 
 	if (loading) return <Loader />;
 
-	if (isAuthenticated === authenticated) return <Outlet />;
+	if (isAuthenticated === allowAuthenticated) return <Outlet />;
 
-	return <Navigate to={navigateTo} />;
+	return <Navigate to={failureRedirect} />;
 }
 
 export default AuthGuard;

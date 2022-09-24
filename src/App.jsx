@@ -17,13 +17,11 @@ const StyledApp = styled.div`
 `;
 
 function App() {
-
-    // const isLoading = isAuthenticated === false && tokenExpired === false;
     return (
         <ChakraProvider>
             <BrowserRouter>
                 <Routes>
-                    <Route element={<AuthGuard authenticated={true} navigateTo="/login" />}>
+                    <Route element={<AuthGuard allowAuthenticated={true} failureRedirect="/login" />}>
                         <Route
                             path="/"
                             element={
@@ -39,7 +37,7 @@ function App() {
                             }
                         />
                     </Route>
-                    <Route element={<AuthGuard authenticated={false} navigateTo="/dashboard" />}>
+                    <Route element={<AuthGuard allowAuthenticated={false} failureRedirect="/dashboard" />}>
                         <Route
                             path="/login"
                             element={<Login />}
